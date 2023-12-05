@@ -1,6 +1,8 @@
 #pragma once
 #include "Definitions.h"
 #include "Character.h"
+#include "Spells/BaseSpell.h"
+#include "Spells/ThornAura.h"
 
 class Player : public Character
 {
@@ -16,6 +18,7 @@ public:
 	void SetPickupRadius(float pickupRadius);
 	int GetFireSpeed();
 	void SetFireSpeed(int fireSpeed);
+	void AddOrUpgradeSpell(CardType spell);
 
 private:
 	void MoveUp(int limit);
@@ -29,5 +32,7 @@ private:
 	long long levelThreshold;
 	float pickupRadius;
 	int fireSpeed;
+	int numSpells = 0;
+	std::map<int, BaseSpell*> spells;
 };
 

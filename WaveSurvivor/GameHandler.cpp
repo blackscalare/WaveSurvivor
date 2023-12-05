@@ -532,6 +532,9 @@ void GameHandler::HandleSelectedCard(Card* card)
 	case PICKUP:
 		world->GetPlayerPtr()->SetPickupRadius(world->GetPlayerPtr()->GetPickupRadius() * 1.05f);
 		break;
+	case THORN_AURA:
+		world->GetPlayerPtr()->AddOrUpgradeSpell(THORN_AURA);
+		break;
 	default:
 		Logger::Log(Logger::ERROR, "Card type not implemented!", __FILE__, __LINE__);
 	}

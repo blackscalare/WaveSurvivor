@@ -68,13 +68,15 @@ constexpr const char* CARD_TEXT[] = {
 	"Damage",
 	"Attack speed",
 	"Health",
-	"Pickup"};
+	"Pickup",
+	"Thorn aura"};
 constexpr const char* CARD_DESCRIPTIIONS[] = {
 	"Move speed +5%",
 	"Damage +5%",
 	"Attack speed +5%",
 	"Health +5%",
-	"Pickup +5%"
+	"Pickup +5%",
+	"Creates a thorn aura around player"
 };
 // Card texts
 
@@ -189,7 +191,8 @@ enum CardType {
 	DAMAGE,
 	ATTACK_SPEED,
 	HEALTH,
-	PICKUP
+	PICKUP,
+	THORN_AURA
 };
 
 struct CardEvent {

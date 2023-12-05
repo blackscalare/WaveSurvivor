@@ -26,9 +26,11 @@ void LevelUpScreenHandler::Init(bool reset)
 		healthUpgradeTexture = LoadTexture("textures/healthUpgradeTexture.png");
 		moveSpeedUpgradeTexture = LoadTexture("textures/moveSpeedUpgradeTexture.png");
 		fireSpeedUpgradeTexture = LoadTexture("textures/fireSpeedUpgradeTexture.png");
-		pikcupUpgradeTexture = LoadTexture("textures/pickupUpgradeTexture.png");
+		pickupUpgradeTexture = LoadTexture("textures/pickupUpgradeTexture.png");
+		thornAuraTexture = LoadTexture("textures/thornAuraTexture.png");
+
 		// IMPORTANT Images are in the same order as the CardType enum
-		images = { &moveSpeedUpgradeTexture, &damageUpgradeTexture, &fireSpeedUpgradeTexture, &healthUpgradeTexture, &pikcupUpgradeTexture };
+		images = { &moveSpeedUpgradeTexture, &damageUpgradeTexture, &fireSpeedUpgradeTexture, &healthUpgradeTexture, &pickupUpgradeTexture, &thornAuraTexture };
 	}
 	else {
 		for (auto c : cards)
@@ -63,7 +65,7 @@ void LevelUpScreenHandler::Init(bool reset)
 
 	// Generate card types
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
-	CardType cardTypes[] = { SPEED, DAMAGE, ATTACK_SPEED, HEALTH, PICKUP };
+	CardType cardTypes[] = { SPEED, DAMAGE, ATTACK_SPEED, HEALTH, PICKUP, THORN_AURA };
 	// Shuffle the card types array to ensure they are never the same
 	std::shuffle(std::begin(cardTypes), std::end(cardTypes), std::default_random_engine(std::rand()));
 	for (int i = 0; i < cards.size(); ++i) {

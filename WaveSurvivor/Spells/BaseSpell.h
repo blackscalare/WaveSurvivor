@@ -10,6 +10,11 @@ public:
 		return id == other.id;
 	}
 
+	friend bool operator<(const BaseSpell& a, const BaseSpell& b)
+	{
+		return a.id < b.id;
+	}
+
 protected:
 	int id;
 	int level;

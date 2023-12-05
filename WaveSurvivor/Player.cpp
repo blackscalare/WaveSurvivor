@@ -74,6 +74,17 @@ void Player::SetFireSpeed(int fireSpeed)
 	this->fireSpeed = fireSpeed;
 }
 
+void Player::AddOrUpgradeSpell(CardType spell)
+{
+	switch (spell) {
+	case THORN_AURA:
+		spells.insert(std::make_pair(numSpells++, new ThornAura()));
+		break;
+	default:
+		Logger::Log(Logger::ERROR, "Spell is not yet implemented", __FILE__, __LINE__);
+	}
+}
+
 void Player::MoveUp(int limit)
 {
 	float newPos = position.y - moveSpeed;

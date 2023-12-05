@@ -34,7 +34,8 @@ private:
 	Texture2D healthUpgradeTexture;
 	Texture2D moveSpeedUpgradeTexture;
 	Texture2D fireSpeedUpgradeTexture;
-	Texture2D pikcupUpgradeTexture;
+	Texture2D pickupUpgradeTexture;
+	Texture2D thornAuraTexture;
 	std::vector<Texture2D*> images;
 };
 
