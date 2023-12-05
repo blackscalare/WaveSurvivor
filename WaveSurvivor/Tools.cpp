@@ -86,3 +86,12 @@ Position Tools::Random::GenerateRandomPosition(int minX, int maxX, int minY, int
     pos.y = distrY(gen);
     return pos;
 }
+
+int Tools::Random::GenerateRandomSign()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int>distr(0, 1);
+    int randomValue = distr(gen);
+    return randomValue == 0 ? -1 : 1;
+}
