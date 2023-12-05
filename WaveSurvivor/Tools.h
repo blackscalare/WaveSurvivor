@@ -43,6 +43,7 @@ namespace Tools
 	public:
 		static int GenerateRandomCoordinate(int start, int maxDistance);
 		static Position GenerateRandomPosition(int minX, int maxX, int minY, int maxY);
+		static int GenerateRandomSign();
 	};
 };
 
