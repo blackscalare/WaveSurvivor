@@ -172,7 +172,7 @@ void Renderer::DrawPlayer()
 			framesCounter = 0;
 			currentPlayerFrame++;
 			if (currentPlayerFrame > 3) currentPlayerFrame = 0;
-			playerFrameRec.x = (float)currentPlayerFrame * (float)playerTexture.width / 2;
+			playerFrameRec.x = (float)currentPlayerFrame * (float)playerTexture.width / 3;
 		}
 	}
 	else {
