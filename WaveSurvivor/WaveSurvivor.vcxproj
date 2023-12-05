@@ -138,6 +138,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Spells\BaseSpell.cpp" />
+    <ClCompile Include="Spells\ThornAura.cpp" />
     <ClCompile Include="Tools.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="XPOrb.cpp" />
@@ -156,6 +158,8 @@
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Spells\BaseSpell.h" />
+    <ClInclude Include="Spells\ThornAura.h" />
     <ClInclude Include="Tools.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="XPOrb.h" />

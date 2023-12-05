@@ -78,6 +78,12 @@ constexpr const char* CARD_DESCRIPTIIONS[] = {
 };
 // Card texts
 
+// Spells
+#define DEFAULT_THORN_AURA		30
+#define DEFAULT_THORN_DAMAGE	10
+#define DEFAULT_THORN_FIRE_RATE 1100
+// Spell
+
 struct Position
 {
 	int x, y;
@@ -208,4 +214,8 @@ enum RenderState {
 	MAIN_MENU,
 	OPTIONS,
 	LEVEL_UP
+};
+
+enum SpellType {
+
 };

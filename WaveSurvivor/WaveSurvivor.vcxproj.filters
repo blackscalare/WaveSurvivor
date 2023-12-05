@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Spells">
+      <UniqueIdentifier>{8de6dde1-4bc3-46a4-8530-d799430da729}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -56,6 +59,12 @@
     </ClCompile>
     <ClCompile Include="Chest.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Spells\ThornAura.cpp">
+      <Filter>Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="Spells\BaseSpell.cpp">
+      <Filter>Spells</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +115,12 @@
     </ClInclude>
     <ClInclude Include="Chest.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spells\ThornAura.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="Spells\BaseSpell.h">
+      <Filter>Spells</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
