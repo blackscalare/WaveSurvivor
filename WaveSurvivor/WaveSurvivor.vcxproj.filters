@@ -16,6 +16,9 @@
     <Filter Include="Spells">
       <UniqueIdentifier>{8de6dde1-4bc3-46a4-8530-d799430da729}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainMenu">
+      <UniqueIdentifier>{0fc5f13f-d9b7-4092-9f7d-21bf032af095}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -65,6 +68,12 @@
     </ClCompile>
     <ClCompile Include="Spells\BaseSpell.cpp">
       <Filter>Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu\MainMenu.cpp">
+      <Filter>MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +130,12 @@
     </ClInclude>
     <ClInclude Include="Spells\BaseSpell.h">
       <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu\MainMenu.h">
+      <Filter>MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

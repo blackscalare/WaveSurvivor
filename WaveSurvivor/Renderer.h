@@ -4,6 +4,8 @@
 #include "LevelUpScreenHandler.h"
 #include "GUI.h"
 #include "Tools.h"
+#include "TextureHandler.h"
+#include "MainMenu/MainMenu.h"
 
 class Renderer
 {
@@ -24,20 +26,19 @@ private:
 	void ReturnToMainMenu();
 	void RenderGame();
 	void RenderLevelUpScreen();
+	void RenderMainMenu();
 
 	RenderState currentState;
 	GameHandler* gameHandler;
 	LevelUpScreenHandler* levelUpScreenHandler;
+	TextureHandler* textureHandler;
+	MainMenu* mainMenu;
+
 	int centerX;
 	int centerY;
 	int framesCounter;
 	int playerFramesSpeed;
 	Rectangle playerFrameRec;
 	int currentPlayerFrame;
-	Texture2D background;
-	Texture2D playerTexture;
-	Texture2D zombieTexture;
-	Texture2D xpOrbTexture;
-	Texture2D chestTexture;
 };
 

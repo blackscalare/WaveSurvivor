@@ -11,28 +11,22 @@ Renderer::Renderer()
 	SetTargetFPS(FPS);
 	
 	// TODO should be main menu or something at start
-	currentState = GAME;
+	currentState = MAIN_MENU;
 
+	textureHandler = new TextureHandler();
 	// TODO should not be initialized here since we do not start the game immediately
 	gameHandler = new GameHandler();
-	levelUpScreenHandler = new LevelUpScreenHandler(gameHandler);
+	levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
+	mainMenu = new MainMenu(textureHandler);
 
 	centerX = WIDTH / 2;
 	centerY = HEIGHT / 2;
 
-
-	// TODO: Move all texture loading and initialization to a separate class
-	// Renderer should only be responsible for rendering, nothing else.
-	background		= LoadTexture("textures/mapTexture_huge.png");
-	playerTexture	= LoadTexture("textures/playerAnimTexture.png");
-	zombieTexture	= LoadTexture("textures/zombieTexture.png");
-	xpOrbTexture	= LoadTexture("textures/xpOrbTexture.png");
-	chestTexture	= LoadTexture("textures/chestTexture.png");
-
+	// TODO: move player animations somewhere else, animation handler?
 	framesCounter = 0;
 	playerFramesSpeed = 7;
 	currentPlayerFrame = 0;
-	playerFrameRec = { 0.f, 0.f, (float)playerTexture.width / 3, (float)playerTexture.height };
+	playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->height };
 }
 
 Renderer::~Renderer()
@@ -41,11 +35,8 @@ Renderer::~Renderer()
 		delete gameHandler;
 	if(levelUpScreenHandler != nullptr)
 		delete levelUpScreenHandler;
-	UnloadTexture(background);
-	UnloadTexture(playerTexture);
-	UnloadTexture(zombieTexture);
-	UnloadTexture(xpOrbTexture);
-	UnloadTexture(chestTexture);
+	if (textureHandler != nullptr)
+		delete textureHandler;
 }
 
 void Renderer::Render()
@@ -72,6 +63,7 @@ void Renderer::Render()
 
 			switch (currentState) {
 			case MAIN_MENU:
+				RenderMainMenu();
 				break;
 			case GAME:
 			case LEVEL_UP:
@@ -102,10 +94,10 @@ void Renderer::DrawObjects(std::vector<Object> objectsInViewport)
 				break;
 			case XP_ORB:
 				//DrawCircle(screenPos.x, screenPos.y, DEFAULT_XP_ORB_RADIUS, GREEN);
-				DrawTexture(xpOrbTexture, screenPos.x, screenPos.y, WHITE);
+				DrawTexture(*textureHandler->GetTexture(XP_ORB_TEXTURE), screenPos.x, screenPos.y, WHITE);
 				break;
 			case CHEST:
-				DrawTexture(chestTexture, screenPos.x, screenPos.y, WHITE);
+				DrawTexture(*textureHandler->GetTexture(CHEST_TEXTURE), screenPos.x, screenPos.y, WHITE);
 				break;
 			default:
 				Logger::Log(Logger::ERROR, "Object type not implement");
@@ -123,7 +115,7 @@ void Renderer::DrawEnemies(std::vector<Zombie*> enemiesInViewport)
 			Position screenPos = Tools::ScreenSpace::GetWorldToScreen( pos, gameHandler->GetPlayerPosition());
 
 			//DrawRectangle(screenPos.x, screenPos.y, DEFAULT_ZOMBIE_WIDTH, DEFAULT_ZOMBIE_WIDTH, RED);
-			DrawTexture(zombieTexture, screenPos.x, screenPos.y, WHITE);
+			DrawTexture(*textureHandler->GetTexture(ZOMBIE_TEXTURE), screenPos.x, screenPos.y, WHITE);
 			GUI::HealthBar::DrawEnemyHealthBar(z, gameHandler->GetPlayerPosition());
 
 			if(gameHandler->GetDebugMode()) {
@@ -172,18 +164,18 @@ void Renderer::DrawPlayer()
 			framesCounter = 0;
 			currentPlayerFrame++;
 			if (currentPlayerFrame > 3) currentPlayerFrame = 0;
-			playerFrameRec.x = (float)currentPlayerFrame * (float)playerTexture.width / 3;
+			playerFrameRec.x = (float)currentPlayerFrame * (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3;
 		}
 	}
 	else {
 		framesCounter = 0;
 		currentPlayerFrame = 0;
-		playerFrameRec = { 0.f, 0.f, (float)playerTexture.width / 3, (float)playerTexture.height };
+		playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->height };
 	}
 	
 	//DrawRectangle(centerX, centerY, 10, 10, WHITE);
 	//DrawTexture(playerTexture, centerX, centerY, WHITE);
-	DrawTextureRec(playerTexture, playerFrameRec, { (float)centerX, (float)centerY }, WHITE);
+	DrawTextureRec(*textureHandler->GetTexture(PLAYER_TEXTURE), playerFrameRec, { (float)centerX, (float)centerY }, WHITE);
 	GUI::HealthBar::DrawPlayerHealthBar(gameHandler->GetWorldPtr()->GetPlayerPtr());
 
 	// Draw hitbox
@@ -208,14 +200,14 @@ void Renderer::DrawBackground()
 {
 	Position playerPos = gameHandler->GetPlayerPosition();
 
-	float x = fmod(-playerPos.x + GetScreenWidth() / 2.0f, background.width);
-	float y = fmod(-playerPos.y + GetScreenHeight() / 2.0f, background.height);
+	float x = fmod(-playerPos.x + GetScreenWidth() / 2.0f, textureHandler->GetTexture(BACKGROUND_TEXTURE)->width);
+	float y = fmod(-playerPos.y + GetScreenHeight() / 2.0f, textureHandler->GetTexture(BACKGROUND_TEXTURE)->height);
 
 	if(playerPos.x + GetScreenWidth() / 2 > gameHandler->GetWorldPtr()->GetWorldSize().x) {
-		DrawTextureEx(background, { playerPos.x + GetScreenWidth() / 2.0f, y }, 0, 1.0f, WHITE);
+		DrawTextureEx(*textureHandler->GetTexture(BACKGROUND_TEXTURE), { playerPos.x + GetScreenWidth() / 2.0f, y }, 0, 1.0f, WHITE);
 	}
 
-	DrawTextureEx(background, { x, y }, 0, 1.0f, WHITE);
+	DrawTextureEx(*textureHandler->GetTexture(BACKGROUND_TEXTURE), { x, y }, 0, 1.0f, WHITE);
 }
 
 void Renderer::ReturnToMainMenu()
@@ -224,10 +216,6 @@ void Renderer::ReturnToMainMenu()
 		delete gameHandler;
 	if (levelUpScreenHandler != nullptr)
 		delete levelUpScreenHandler;
-	UnloadTexture(background);
-	UnloadTexture(playerTexture);
-	UnloadTexture(zombieTexture);
-	UnloadTexture(xpOrbTexture);
 }
 
 void Renderer::RenderGame()
@@ -260,7 +248,7 @@ void Renderer::RenderGame()
 void Renderer::RenderLevelUpScreen()
 {
 	if (levelUpScreenHandler == nullptr)
-		levelUpScreenHandler = new LevelUpScreenHandler(gameHandler);
+		levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
 
 	levelUpScreenHandler->Update();
 
@@ -283,5 +271,30 @@ void Renderer::RenderLevelUpScreen()
 	if (levelUpScreenHandler->GetCardEvent().cardAction) {
 		currentState = GAME;
 		levelUpScreenHandler->Reset();
+	}
+}
+
+void Renderer::RenderMainMenu()
+{
+	if (mainMenu == nullptr) {
+		mainMenu = new MainMenu(textureHandler);
+	}
+
+	mainMenu->Update();
+	std::vector<MenuButton*> buttons = mainMenu->GetButtons();
+
+	float scaleX = static_cast<float>(GetScreenWidth()) / static_cast<float>(textureHandler->GetTexture(MAIN_MENU_BACKGROUND_TEXTURE)->width);
+	float scaleY = static_cast<float>(GetScreenHeight()) / static_cast<float>(textureHandler->GetTexture(MAIN_MENU_BACKGROUND_TEXTURE)->height);
+
+	// Calculate the average scale to fit the texture into the window
+	float scale = (scaleX + scaleY) / 2.0f;
+	DrawTextureEx(*textureHandler->GetTexture(MAIN_MENU_BACKGROUND_TEXTURE), { 0,0 }, 0, scale, WHITE);
+
+	for (auto& button : buttons) {
+		// TODO: replace card text sizes with button text sizes
+		int buttonXMax = button->bounds.x + (button->bounds.x + button->bounds.width);
+		int buttonTextX = Tools::Text::CenterTextX(buttonXMax, button->text, CARD_TEXT_SIZE);
+		DrawTextureRec(*textureHandler->GetTexture(BUTTON_TEXTURE), button->sourceRec, { button->bounds.x, button->bounds.y }, WHITE);
+		DrawText(button->text, buttonTextX, button->bounds.y + CARD_TEXT_SIZE + 20, CARD_TEXT_SIZE, WHITE);
 	}
 }

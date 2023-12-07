@@ -86,6 +86,8 @@ constexpr const char* CARD_DESCRIPTIIONS[] = {
 #define DEFAULT_THORN_FIRE_RATE 1100
 // Spell
 
+#define NUM_BUTTON_FRAMES 3
+
 struct Position
 {
 	int x, y;
@@ -212,6 +214,14 @@ struct Card {
 	CardType type;
 };
 
+struct MenuButton {
+	int id;
+	const char* text;
+	Rectangle sourceRec;
+	Rectangle bounds;
+	int state = 0;
+};
+
 enum RenderState {
 	GAME,
 	MAIN_MENU,
@@ -221,4 +231,21 @@ enum RenderState {
 
 enum SpellType {
 
+};
+
+enum TextureName {
+	BACKGROUND_TEXTURE,
+	PLAYER_TEXTURE,
+	ZOMBIE_TEXTURE,
+	XP_ORB_TEXTURE,
+	CHEST_TEXTURE,
+	CARD_TEXTURE,
+	DAMAGE_UPGRADE_TEXTURE,
+	HEALTH_UPGRADE_TEXTURE,
+	MOVE_SPEED_UPGRADE_TEXTURE,
+	FIRE_SPEED_UPGRADE_TEXTURE,
+	PICKUP_UPGRADE_TEXTURE,
+	THORN_AURA_TEXTURE,
+	BUTTON_TEXTURE,
+	MAIN_MENU_BACKGROUND_TEXTURE
 };

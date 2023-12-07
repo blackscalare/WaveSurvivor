@@ -1,36 +1,33 @@
 #include "LevelUpScreenHandler.h"
 #include "Logger.h"
 
-LevelUpScreenHandler::LevelUpScreenHandler(GameHandler* gameHandler)
+LevelUpScreenHandler::LevelUpScreenHandler(GameHandler* gameHandler, TextureHandler* textureHandler)
 {
 	this->gameHandler = gameHandler;
+	this->textureHandler = textureHandler;
 	Init(false);
 }
 
 LevelUpScreenHandler::~LevelUpScreenHandler()
 {
-	UnloadTexture(cardTexture);
-	for (Texture2D* tex : images) {
-		UnloadTexture(*tex);
-	}
-	for (auto tex : images) {
+	/*for (auto tex : images) {
 		delete tex;
-	}
+	}*/
 }
 
 void LevelUpScreenHandler::Init(bool reset)
 {
 	if (!reset) {
-		cardTexture = LoadTexture("textures/cardTexture_biggest.png");
-		damageUpgradeTexture = LoadTexture("textures/damageUpgradeTexture.png");
-		healthUpgradeTexture = LoadTexture("textures/healthUpgradeTexture.png");
-		moveSpeedUpgradeTexture = LoadTexture("textures/moveSpeedUpgradeTexture.png");
-		fireSpeedUpgradeTexture = LoadTexture("textures/fireSpeedUpgradeTexture.png");
-		pickupUpgradeTexture = LoadTexture("textures/pickupUpgradeTexture.png");
-		thornAuraTexture = LoadTexture("textures/thornAuraTexture.png");
+		cardTexture = textureHandler->GetTexture(CARD_TEXTURE);
+		damageUpgradeTexture = textureHandler->GetTexture(DAMAGE_UPGRADE_TEXTURE);
+		healthUpgradeTexture = textureHandler->GetTexture(HEALTH_UPGRADE_TEXTURE);
+		moveSpeedUpgradeTexture = textureHandler->GetTexture(MOVE_SPEED_UPGRADE_TEXTURE);
+		fireSpeedUpgradeTexture = textureHandler->GetTexture(FIRE_SPEED_UPGRADE_TEXTURE);
+		pickupUpgradeTexture = textureHandler->GetTexture(PICKUP_UPGRADE_TEXTURE);
+		thornAuraTexture = textureHandler->GetTexture(THORN_AURA_TEXTURE);
 
 		// IMPORTANT Images are in the same order as the CardType enum
-		images = { &moveSpeedUpgradeTexture, &damageUpgradeTexture, &fireSpeedUpgradeTexture, &healthUpgradeTexture, &pickupUpgradeTexture, &thornAuraTexture };
+		images = { moveSpeedUpgradeTexture, damageUpgradeTexture, fireSpeedUpgradeTexture, healthUpgradeTexture, pickupUpgradeTexture, thornAuraTexture };
 	}
 	else {
 		for (auto c : cards)
@@ -46,16 +43,16 @@ void LevelUpScreenHandler::Init(bool reset)
 	card2->id = 1;
 	card3->id = 2;
 
-	frameWidth = (float)cardTexture.width / NUM_CARD_FRAMES;
-	sourceRec = { 0, 0, frameWidth, (float)cardTexture.height };
+	frameWidth = (float)cardTexture->width / NUM_CARD_FRAMES;
+	sourceRec = { 0, 0, frameWidth, (float)cardTexture->height };
 
 	card1->sourceRec = sourceRec;
 	card2->sourceRec = sourceRec;
 	card3->sourceRec = sourceRec;
 
-	card1->bounds = { GetScreenWidth() / 2.0f - (cardTexture.width * 3.f) / NUM_CARD_FRAMES / 2.0f - CARD_PADDING, GetScreenHeight() / 2.0f - cardTexture.height / 2.0f, frameWidth, (float)cardTexture.height };
-	card2->bounds = { GetScreenWidth() / 2.0f - cardTexture.width / NUM_CARD_FRAMES / 2.0f, GetScreenHeight() / 2.0f - cardTexture.height / 2.0f, frameWidth, (float)cardTexture.height };
-	card3->bounds = { GetScreenWidth() / 2.0f + cardTexture.width / NUM_CARD_FRAMES / 2.0f + CARD_PADDING, GetScreenHeight() / 2.0f - cardTexture.height / 2.0f, frameWidth, (float)cardTexture.height };
+	card1->bounds = { GetScreenWidth() / 2.0f - (cardTexture->width * 3.f) / NUM_CARD_FRAMES / 2.0f - CARD_PADDING, GetScreenHeight() / 2.0f - cardTexture->height / 2.0f, frameWidth, (float)cardTexture->height };
+	card2->bounds = { GetScreenWidth() / 2.0f - cardTexture->width / NUM_CARD_FRAMES / 2.0f, GetScreenHeight() / 2.0f - cardTexture->height / 2.0f, frameWidth, (float)cardTexture->height };
+	card3->bounds = { GetScreenWidth() / 2.0f + cardTexture->width / NUM_CARD_FRAMES / 2.0f + CARD_PADDING, GetScreenHeight() / 2.0f - cardTexture->height / 2.0f, frameWidth, (float)cardTexture->height };
 
 	mousePoint = { 0.f, 0.f };
 	cardEvent.selectedCard = -1;
@@ -113,7 +110,7 @@ void LevelUpScreenHandler::Reset()
 
 Texture2D LevelUpScreenHandler::GetCardTexture() const
 {
-	return cardTexture;
+	return *cardTexture;
 }
 
 Rectangle LevelUpScreenHandler::GetSourceRec() const
