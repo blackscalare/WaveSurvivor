@@ -1,10 +1,7 @@
-#include "Renderer.h"
+#include "WaveSurvivor.h"
 
 int main()
 {
-	Renderer* renderer = new Renderer();
-	
-	renderer->Render();
-
-	delete renderer;
+	WaveSurvivor waveSurvivor = WaveSurvivor();
+	waveSurvivor.Run();
 }

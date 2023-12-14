@@ -16,6 +16,8 @@ TextureHandler::TextureHandler()
 	thornAuraTexture				= LoadTexture("textures/thornAuraTexture.png");
 	buttonTexture					= LoadTexture("textures/buttonTexture.png");
 	mainMenuBackgroundTexture		= LoadTexture("textures/mainMenuBackgroundTexture.png");
+	altMenuBackgroundTexture		= LoadTexture("textures/altMenuBackground.png");
+	characterSelectBorderTexture	= LoadTexture("textures/characterSelectBorder.png");
 	
 	textures.insert(std::make_pair(BACKGROUND_TEXTURE, &background));
 	textures.insert(std::make_pair(PLAYER_TEXTURE, &playerTexture));
@@ -31,28 +33,16 @@ TextureHandler::TextureHandler()
 	textures.insert(std::make_pair(THORN_AURA_TEXTURE, &thornAuraTexture));
 	textures.insert(std::make_pair(BUTTON_TEXTURE, &buttonTexture));
 	textures.insert(std::make_pair(MAIN_MENU_BACKGROUND_TEXTURE, &mainMenuBackgroundTexture));
+	textures.insert(std::make_pair(ALT_MENU_BACKGROUND_TEXTURE, &altMenuBackgroundTexture));
+	textures.insert(std::make_pair(CHARACTER_SELECT_BORDER_TEXTURE, &characterSelectBorderTexture));
 }
 
 TextureHandler::~TextureHandler()
 {
 	for (auto& texture : textures) {
+		UnloadTexture(*texture.second);
 		delete texture.second;
 	}
-
-	UnloadTexture(background);
-	UnloadTexture(playerTexture);
-	UnloadTexture(zombieTexture);
-	UnloadTexture(xpOrbTexture);
-	UnloadTexture(chestTexture);
-	UnloadTexture(cardTexture);
-	UnloadTexture(damageUpgradeTexture);
-	UnloadTexture(healthUpgradeTexture);
-	UnloadTexture(moveSpeedUpgradeTexture);
-	UnloadTexture(fireSpeedUpgradeTexture);
-	UnloadTexture(pickupUpgradeTexture);
-	UnloadTexture(thornAuraTexture);
-	UnloadTexture(buttonTexture);
-	UnloadTexture(mainMenuBackgroundTexture);
 }
 
 Texture2D* TextureHandler::GetTexture(TextureName name)

@@ -6,11 +6,17 @@
 #include <set>
 #include <random>
 #include <functional>
-
+#include <iomanip>
 
 #include "raylib.h"
 #include "raymath.h"
 #include "Quadtree.h"
+
+// Window properties
+#define WIDTH 1280
+#define HEIGHT 720
+#define FPS 60
+#define TITLE "Wave Survivor"
 
 // Sizes
 #define DEFAULT_PLAYER_WIDTH 20
@@ -42,7 +48,6 @@
 #define DEFAULT_PLAYER_ATTACK_SPEED 800
 
 // Render settings
-#define FPS 60
 #define MAX_DISTANCE_FROM_PLAYER 1000
 #define MIN_DISTANCE_FROM_PLAYER 300
 
@@ -84,7 +89,14 @@ constexpr const char* CARD_DESCRIPTIIONS[] = {
 #define DEFAULT_THORN_AURA		30
 #define DEFAULT_THORN_DAMAGE	10
 #define DEFAULT_THORN_FIRE_RATE 1100
+#define DEFAULT_BOLT_FIRE_RATE 800
+#define DEFAULT_BOLT_DAMAGE	10
 // Spell
+
+// IDs
+#define MAIN_MENU_BUTTON_START_ID		0
+#define MAIN_MENU_BUTTON_OPTIONS_ID		1
+#define MAIN_MENU_BUTTON_EXIT_ID		2
 
 #define NUM_BUTTON_FRAMES 3
 
@@ -222,6 +234,15 @@ struct MenuButton {
 	int state = 0;
 };
 
+struct CharacterSelectBox {
+	int id;
+	const char* text;
+	Rectangle sourceRec;
+	Rectangle bounds;
+	Texture2D* characterImage;
+	int state = 0;
+};
+
 enum RenderState {
 	GAME,
 	MAIN_MENU,
@@ -230,7 +251,8 @@ enum RenderState {
 };
 
 enum SpellType {
-
+	SPELL_BOLT,
+	SPELL_THORN_AURA
 };
 
 enum TextureName {
@@ -247,5 +269,7 @@ enum TextureName {
 	PICKUP_UPGRADE_TEXTURE,
 	THORN_AURA_TEXTURE,
 	BUTTON_TEXTURE,
-	MAIN_MENU_BACKGROUND_TEXTURE
+	MAIN_MENU_BACKGROUND_TEXTURE,
+	ALT_MENU_BACKGROUND_TEXTURE,
+	CHARACTER_SELECT_BORDER_TEXTURE
 };

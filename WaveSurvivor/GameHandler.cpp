@@ -1,9 +1,10 @@
 #include "GameHandler.h"
 #include "Logger.h"
 
-GameHandler::GameHandler()
+GameHandler::GameHandler(TextureHandler* textureHandler)
 {
 	Initialize();
+	this->textureHandler = textureHandler;
 }
 
 GameHandler::~GameHandler()
@@ -109,55 +110,12 @@ void GameHandler::Initialize()
 	playerFireDestination = { 0,0 };
 	debugMode = false;
 	gameOver = false;
+	startTime = Tools::Time::GetCurrentEpocMs();
 	
 	Position playerStartPosition = {world->GetWorldSize().x / 2, world->GetWorldSize().y / 2};
 	world->GetPlayerPtr()->SetPosition(playerStartPosition);
 
 	world->GetObjectsPtr()->insert(new Chest({ world->GetWorldSize().x / 2 + 100, world->GetWorldSize().y / 2 }));
-	//auto box = quadtree::Box(0.0f, 0.0f, (float)world->GetWorldSize().x, (float)world->GetWorldSize().y);
-	//auto quadTree = quadtree::Quadtree<Node*, decltype(getBox)>(box, getBox);
-	//quadTree = quadtree::Quadtree<Node*, decltype(&GetBox)>(box, &GetBox);
-	//Node* playerNode = new Node;
-
-	//playerNode->box.left = playerStartPosition.x;
-	//playerNode->box.top = playerStartPosition.y;
-	//playerNode->box.width = DEFAULT_PLAYER_WIDTH;
-	//playerNode->box.height = DEFAULT_PLAYER_HEIGHT;
-	//playerNode->id = quadtreeId++;
-	//playerNode->c = world->GetPlayerPtr();
-
-	//quadTree.add(playerNode);
-	
-	/*otherNode.box.left = playerStartPosition.x + 10;
-	otherNode.box.top = playerStartPosition.y;
-	otherNode.box.width = DEFAULT_ZOMBIE_WIDTH;
-	otherNode.box.height = DEFAULT_ZOMBIE_HEIGHT;
-	otherNode.id = quadtreeId++;
-
-	othernode2.box.left = playerStartPosition.x;
-	othernode2.box.top = playerStartPosition.y;
-	othernode2.box.width = DEFAULT_ZOMBIE_WIDTH;
-	othernode2.box.height = DEFAULT_ZOMBIE_HEIGHT;
-	othernode2.id = quadtreeId++;
-	
-	quadTree.add(&playerNode);
-	quadTree.add(&otherNode);
-	quadTree.add(&othernode2);
-	auto inters = quadTree.findAllIntersections();
-
-	Logger::Debug("Intersections:", inters.size());*/
-
-	/*auto box = quadtree::Box(0.0f, 0.0f, (float)world->GetWorldSize().x, (float)world->GetWorldSize().y);
-	quadTree = quadtree::Quadtree<Node*, decltype(getBox)>(box, getBox);
-	Node playerNode;
-	playerNode.box.left = playerStartPosition.x;
-	playerNode.box.top = playerStartPosition.y;
-	playerNode.box.width = DEFAULT_PLAYER_WIDTH;
-	playerNode.box.height = DEFAULT_PLAYER_HEIGHT;
-	playerNode.id = quadtreeId++;
-
-	quadTree.add(&playerNode);
-	auto intersections = quadTree.findAllIntersections();*/
 }
 
 void GameHandler::HandlePickup()
@@ -475,6 +433,11 @@ void GameHandler::UpdateZombiesKilled()
 
 }
 
+long long GameHandler::GetStartTime() const
+{
+	return startTime;
+}
+
 Position GameHandler::GetPlayerFireDestination()
 {
 	return playerFireDestination;
@@ -543,4 +506,9 @@ void GameHandler::HandleSelectedCard(Card* card)
 bool GameHandler::PlayerIsMoving()
 {
 	return playerIsMoving;
+}
+
+int GameHandler::GetZombiesKilled() const
+{
+	return zombiesKilled;
 }

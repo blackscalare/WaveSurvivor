@@ -15,6 +15,8 @@ public:
 		return a.id < b.id;
 	}
 
+	virtual SpellType GetType() const;
+
 protected:
 	int id;
 	int level;

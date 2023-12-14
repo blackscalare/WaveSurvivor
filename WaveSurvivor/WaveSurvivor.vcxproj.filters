@@ -19,6 +19,12 @@
     <Filter Include="MainMenu">
       <UniqueIdentifier>{0fc5f13f-d9b7-4092-9f7d-21bf032af095}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Menus">
+      <UniqueIdentifier>{8cec9fc7-5bdd-43d0-a547-1c53c2e9c820}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menus\CharacterSelect">
+      <UniqueIdentifier>{7dc3b1de-1dae-477e-9583-6ead221be5ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -74,6 +80,15 @@
     </ClCompile>
     <ClCompile Include="MainMenu\MainMenu.cpp">
       <Filter>MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Spells\Bolt.cpp">
+      <Filter>Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\CharacterSelect\CharacterSelect.cpp">
+      <Filter>Menus\CharacterSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveSurvivor.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +151,15 @@
     </ClInclude>
     <ClInclude Include="MainMenu\MainMenu.h">
       <Filter>MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Spells\Bolt.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\CharacterSelect\CharacterSelect.h">
+      <Filter>Menus\CharacterSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveSurvivor.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

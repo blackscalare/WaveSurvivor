@@ -1,23 +1,14 @@
 #include "Renderer.h"
 #include "Logger.h"
 
-#define WIDTH 1280
-#define HEIGHT 720
-#define TITLE "Wave Survivor"
-
-Renderer::Renderer()
+Renderer::Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, LevelUpScreenHandler* levelUpScreenHandler, MainMenu* mainMenu)
 {
-	InitWindow(WIDTH, HEIGHT, TITLE);
-	SetTargetFPS(FPS);
-	
-	// TODO should be main menu or something at start
 	currentState = MAIN_MENU;
 
-	textureHandler = new TextureHandler();
-	// TODO should not be initialized here since we do not start the game immediately
-	gameHandler = new GameHandler();
-	levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
-	mainMenu = new MainMenu(textureHandler);
+	this->textureHandler = textureHandler;
+	this->gameHandler = gameHandler;
+	this->levelUpScreenHandler = levelUpScreenHandler;
+	this->mainMenu = mainMenu;
 
 	centerX = WIDTH / 2;
 	centerY = HEIGHT / 2;
@@ -31,12 +22,6 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-	if(gameHandler != nullptr)
-		delete gameHandler;
-	if(levelUpScreenHandler != nullptr)
-		delete levelUpScreenHandler;
-	if (textureHandler != nullptr)
-		delete textureHandler;
 }
 
 void Renderer::Render()
@@ -80,6 +65,11 @@ void Renderer::Render()
 
 }
 
+void Renderer::SetState(RenderState state)
+{
+	currentState = state;
+}
+
 void Renderer::DrawObjects(std::vector<Object> objectsInViewport)
 {
 	if (objectsInViewport.size() > 0) {
@@ -93,7 +83,6 @@ void Renderer::DrawObjects(std::vector<Object> objectsInViewport)
 				DrawRectangle(screenPos.x, screenPos.y, 10, 10, WHITE);
 				break;
 			case XP_ORB:
-				//DrawCircle(screenPos.x, screenPos.y, DEFAULT_XP_ORB_RADIUS, GREEN);
 				DrawTexture(*textureHandler->GetTexture(XP_ORB_TEXTURE), screenPos.x, screenPos.y, WHITE);
 				break;
 			case CHEST:
@@ -114,15 +103,10 @@ void Renderer::DrawEnemies(std::vector<Zombie*> enemiesInViewport)
 			// Convert position from world to screen
 			Position screenPos = Tools::ScreenSpace::GetWorldToScreen( pos, gameHandler->GetPlayerPosition());
 
-			//DrawRectangle(screenPos.x, screenPos.y, DEFAULT_ZOMBIE_WIDTH, DEFAULT_ZOMBIE_WIDTH, RED);
 			DrawTexture(*textureHandler->GetTexture(ZOMBIE_TEXTURE), screenPos.x, screenPos.y, WHITE);
 			GUI::HealthBar::DrawEnemyHealthBar(z, gameHandler->GetPlayerPosition());
 
 			if(gameHandler->GetDebugMode()) {
-				// TODO: Since the zombies are only circles now, adjust the drawn hitbox
-				/*Position zPos = *z->GetHitbox().source;
-				zPos.x -= DEFAULT_ZOMBIE_RADIUS;
-				zPos.y -= DEFAULT_ZOMBIE_RADIUS;*/
 				Position screenPos = Tools::ScreenSpace::GetWorldToScreen(*z->GetHitbox().source, gameHandler->GetPlayerPosition());
 				DrawRectangleLines(screenPos.x, screenPos.y, z->GetHitbox().area.width, z->GetHitbox().area.width, GREEN);
 			}
@@ -173,8 +157,6 @@ void Renderer::DrawPlayer()
 		playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->height };
 	}
 	
-	//DrawRectangle(centerX, centerY, 10, 10, WHITE);
-	//DrawTexture(playerTexture, centerX, centerY, WHITE);
 	DrawTextureRec(*textureHandler->GetTexture(PLAYER_TEXTURE), playerFrameRec, { (float)centerX, (float)centerY }, WHITE);
 	GUI::HealthBar::DrawPlayerHealthBar(gameHandler->GetWorldPtr()->GetPlayerPtr());
 
@@ -194,6 +176,8 @@ void Renderer::DrawPlayer()
 void Renderer::DrawGUI()
 {
 	GUI::HUD::DrawXPBar(gameHandler->GetWorldPtr()->GetPlayerPtr());
+	GUI::HUD::DrawZombiesKilled(gameHandler->GetZombiesKilled());
+	GUI::HUD::DrawTime(gameHandler->GetStartTime());
 }
 
 void Renderer::DrawBackground()
@@ -212,17 +196,10 @@ void Renderer::DrawBackground()
 
 void Renderer::ReturnToMainMenu()
 {
-	if(gameHandler != nullptr)
-		delete gameHandler;
-	if (levelUpScreenHandler != nullptr)
-		delete levelUpScreenHandler;
 }
 
 void Renderer::RenderGame()
 {
-	if (gameHandler == nullptr)
-		gameHandler = new GameHandler();
-
 	if(currentState != LEVEL_UP)
 		gameHandler->Update();
 
@@ -247,9 +224,6 @@ void Renderer::RenderGame()
 
 void Renderer::RenderLevelUpScreen()
 {
-	if (levelUpScreenHandler == nullptr)
-		levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
-
 	levelUpScreenHandler->Update();
 
 	// Fade out background
@@ -276,10 +250,6 @@ void Renderer::RenderLevelUpScreen()
 
 void Renderer::RenderMainMenu()
 {
-	if (mainMenu == nullptr) {
-		mainMenu = new MainMenu(textureHandler);
-	}
-
 	mainMenu->Update();
 	std::vector<MenuButton*> buttons = mainMenu->GetButtons();
 

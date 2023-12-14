@@ -24,5 +24,7 @@ private:
 	Texture2D thornAuraTexture;
 	Texture2D buttonTexture;
 	Texture2D mainMenuBackgroundTexture;
+	Texture2D altMenuBackgroundTexture;
+	Texture2D characterSelectBorderTexture;
 };
 

@@ -10,10 +10,11 @@
 class Renderer
 {
 public:
-	Renderer();
+	Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, LevelUpScreenHandler* levelUpScreenHandler, MainMenu* mainMenu);
 	~Renderer();
 
 	void Render();
+	void SetState(RenderState state);
 
 private:
 	void DrawObjects(std::vector<Object> objectsInViewport);

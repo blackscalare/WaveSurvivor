@@ -9,6 +9,8 @@ namespace GUI
 	class HUD {
 	public:
 		static void DrawXPBar(Player* player);
+		static void DrawZombiesKilled(int zombiesKilled);
+		static void DrawTime(long long startTime);
 	};
 
 	class HealthBar {

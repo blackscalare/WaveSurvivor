@@ -18,6 +18,7 @@ void MainMenu::Update()
 			else button->state = 1;
 			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 				// Handle click event
+				callback(button->id);
 			}
 		}
 		else {
@@ -40,9 +41,9 @@ void MainMenu::Init()
 	MenuButton* optionsButton = new MenuButton;
 	MenuButton* exitButton = new MenuButton;
 
-	startButton->id = 0;
-	optionsButton->id = 1;
-	exitButton->id = 2;
+	startButton->id = MAIN_MENU_BUTTON_START_ID;
+	optionsButton->id = MAIN_MENU_BUTTON_OPTIONS_ID;
+	exitButton->id = MAIN_MENU_BUTTON_EXIT_ID;
 
 	frameHeight = (float)buttonTexture->height / NUM_BUTTON_FRAMES;
 	sourceRec = { 0, 0, (float)buttonTexture->width, frameHeight };

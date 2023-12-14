@@ -5,6 +5,7 @@
 #include "Tools.h"
 #include "World.h"
 #include "XPOrb.h"
+#include "TextureHandler.h"
 
 class GameHandler
 {
@@ -16,7 +17,7 @@ public:
 		HARD
 	};
 
-	GameHandler();
+	GameHandler(TextureHandler* textureHandler);
 	~GameHandler();
 
 	void Update();
@@ -34,12 +35,9 @@ public:
 	void SetPlayerJustOpenedChest(bool val);
 	void HandleSelectedCard(Card* card);
 	bool PlayerIsMoving();
-	struct Node
-	{
-		quadtree::Box<float> box;
-		std::size_t id;
-		Character* c;
-	};
+	int GetZombiesKilled() const;
+	long long GetStartTime() const;
+
 private:
 	void Initialize();
 	void HandlePickup();
@@ -65,12 +63,14 @@ private:
 	long long lastTimePlayerFired;
 	Difficulty currentDifficulty;
 	World* world;
+	TextureHandler* textureHandler;
 	Position playerFireDestination;
 	bool gameOver;
 	bool playerJustLeveledUp;
 	bool playerJustOpenedChest;
 	long long zombiesKilled = 0;
 	bool playerIsMoving;
+	long long startTime;
 	//static quadtree::Box<float> GetBox(Node* node)
 	//{
 	//	return node->box;

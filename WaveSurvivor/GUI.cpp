@@ -16,6 +16,33 @@ void GUI::HUD::DrawXPBar(Player* player)
 	DrawText(levelString, GetScreenWidth() / 2 - TextLength(levelString), 20, 30, WHITE);
 }
 
+void GUI::HUD::DrawZombiesKilled(int zombiesKilled)
+{
+	char zombiesKilledString[8];
+	snprintf(zombiesKilledString, 8, "%d", zombiesKilled);
+	DrawText(zombiesKilledString, TextLength(zombiesKilledString) + 10, 20, 20, WHITE);
+}
+
+void GUI::HUD::DrawTime(long long startTime)
+{
+	long long currentTime = Tools::Time::GetCurrentEpocMs();
+	long long diff = currentTime - startTime;
+
+	int hours = static_cast<int>(diff / 3600000); // 1 hour = 3600000 milliseconds
+	int minutes = static_cast<int>((diff % 3600000) / 60000); // 1 minute = 60000 milliseconds
+	int seconds = static_cast<int>((diff % 60000) / 1000); // 1 second = 1000 milliseconds
+
+	std::ostringstream formattedTime;
+
+	if (hours > 0) {
+		formattedTime << std::setfill('0') << std::setw(2) << hours << ":";
+	}
+
+	formattedTime << std::setfill('0') << std::setw(2) << minutes << ":";
+	formattedTime << std::setfill('0') << std::setw(2) << seconds;
+	DrawText(formattedTime.str().c_str(), TextLength(formattedTime.str().c_str()), 20 + 20, 20, WHITE);
+}
+
 void GUI::HealthBar::DrawPlayerHealthBar(Player* player)
 {
 	int health = player->GetHealth();
