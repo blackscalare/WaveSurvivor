@@ -28,6 +28,10 @@ private:
 template<typename ...Args>
 inline void Logger::Log(LogLevel logLevel, const Args & ...args)
 {
+	// TODO: Log to file instead if not in debug
+#ifndef _DEBUG
+	return;
+#endif
 	std::ostringstream oss;
 	LogHelper(oss, args...);
 	switch (logLevel) {
