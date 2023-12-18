@@ -26,6 +26,7 @@ Zombie::Zombie(const Position& playerPosition, int maxDistance)
 	position = randomPosition;
 	Logger::Log(Logger::DEBUG, "Zombie pos:", "(", randomPosition.x, ",", randomPosition.y, ")");
 	health = DEFAULT_ZOMBIE_HEALTH;
+	maxHealth = DEFAULT_ZOMBIE_HEALTH;
 	moveSpeed = DEFAULT_ZOMBIE_MOVE_SPEED;
 	hitbox.area.width = DEFAULT_ZOMBIE_WIDTH;
 	hitbox.area.height = DEFAULT_ZOMBIE_HEIGHT;
