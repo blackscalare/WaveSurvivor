@@ -90,6 +90,12 @@
     <ClCompile Include="WaveSurvivor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h">
@@ -159,6 +165,12 @@
       <Filter>Menus\CharacterSelect</Filter>
     </ClInclude>
     <ClInclude Include="WaveSurvivor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

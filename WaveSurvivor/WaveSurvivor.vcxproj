@@ -134,6 +134,8 @@
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Chest.cpp" />
+    <ClCompile Include="EventHandler.cpp" />
+    <ClCompile Include="EventParser.cpp" />
     <ClCompile Include="GameHandler.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="LevelUpScreenHandler.cpp" />
@@ -158,6 +160,8 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Chest.h" />
     <ClInclude Include="Definitions.h" />
+    <ClInclude Include="EventHandler.h" />
+    <ClInclude Include="EventParser.h" />
     <ClInclude Include="GameHandler.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="LevelUpScreenHandler.h" />

@@ -21,9 +21,11 @@ void WaveSurvivor::Init()
 	// Init window properties and FPS
 	InitWindow(WIDTH, HEIGHT, TITLE);
 	SetTargetFPS(FPS);
-
+	
+	eventHandler = new EventHandler();
+	eventHandler->LoadEvents();
 	textureHandler = new TextureHandler();
-	gameHandler = new GameHandler(textureHandler);
+	gameHandler = new GameHandler(textureHandler, eventHandler);
 	levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
 	mainMenu = new MainMenu(textureHandler);
 	mainMenu->BindCallback(std::bind(&WaveSurvivor::MainMenuButtonCallback, this, std::placeholders::_1));
@@ -38,6 +40,7 @@ void WaveSurvivor::MainMenuButtonCallback(int buttonId)
 	switch (buttonId) {
 	case MAIN_MENU_BUTTON_START_ID:
 		renderer->SetState(GAME);
+		gameHandler->ResetStartTime();
 		break;
 	case MAIN_MENU_BUTTON_OPTIONS_ID:
 		Logger::Debug("Implement");

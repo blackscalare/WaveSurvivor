@@ -6,6 +6,7 @@
 #include "World.h"
 #include "XPOrb.h"
 #include "TextureHandler.h"
+#include "EventHandler.h"
 
 class GameHandler
 {
@@ -17,7 +18,7 @@ public:
 		HARD
 	};
 
-	GameHandler(TextureHandler* textureHandler);
+	GameHandler(TextureHandler* textureHandler, EventHandler* eventHandler);
 	~GameHandler();
 
 	void Update();
@@ -37,6 +38,7 @@ public:
 	bool PlayerIsMoving();
 	int GetZombiesKilled() const;
 	long long GetStartTime() const;
+	void ResetStartTime();
 
 private:
 	void Initialize();
@@ -55,6 +57,8 @@ private:
 	void MoveProjectiles();
 	Position GetNearestEnemyPosition();
 	void UpdateZombiesKilled();
+	void HandleEvents();
+	void SpawnEnemiesFromEvent(int num);
 
 	bool debugMode;
 	int enemyId;
@@ -62,6 +66,7 @@ private:
 	long long lastTimeEnemySpawned;
 	long long lastTimePlayerFired;
 	Difficulty currentDifficulty;
+	EventHandler* eventHandler;
 	World* world;
 	TextureHandler* textureHandler;
 	Position playerFireDestination;

@@ -1,10 +1,11 @@
 #include "GameHandler.h"
 #include "Logger.h"
 
-GameHandler::GameHandler(TextureHandler* textureHandler)
+GameHandler::GameHandler(TextureHandler* textureHandler, EventHandler* eventHandler)
 {
 	Initialize();
 	this->textureHandler = textureHandler;
+	this->eventHandler = eventHandler;
 }
 
 GameHandler::~GameHandler()
@@ -17,6 +18,7 @@ void GameHandler::Update()
 	HandleEnemies();
 	HandleProjectiles();
 	HandleGeneralInput();
+	HandleEvents();
 }
 
 Position GameHandler::GetPlayerPosition()
@@ -433,9 +435,64 @@ void GameHandler::UpdateZombiesKilled()
 
 }
 
+void GameHandler::HandleEvents()
+{
+	long long currentTime = Tools::Time::GetCurrentEpocMs();
+	long long timePassed = currentTime - startTime;
+	
+	int seconds = static_cast<int>((timePassed % 60000) / 1000); // 1 second = 1000 milliseconds
+
+	std::vector<Event<EnemyType>> events = eventHandler->GetEvents();
+
+	std::vector<int> eventsToRemove;
+
+	for (int i = 0; i < events.size(); ++i) {
+		Event<EnemyType> e = events[i];
+
+		if (seconds > e.time) {
+			// Do event and add it for removal
+			Logger::Debug("Executing event", e.id, e.name);
+			for (auto& item : e.enemies) {
+				EnemyType et = item.first;
+				std::vector<int> nums = item.second;
+				for (int num : nums) {
+					switch (et) {
+					case ENEMY_ZOMBIE: {
+						// TODO: Is this safe? Prevents lock when spawning lots of enemies
+						std::thread thread(&GameHandler::SpawnEnemiesFromEvent, this, num);
+						thread.detach();
+						break;
+					}
+					default:
+						Logger::Log(Logger::ERROR, "Enemy type in event does not exist");
+					}
+				}
+			}
+			eventsToRemove.push_back(i);
+		}
+	}
+
+	if (eventsToRemove.size() > 0) {
+		for (int idx : eventsToRemove)
+			eventHandler->RemoveEvent(idx);
+	}
+}
+
+void GameHandler::SpawnEnemiesFromEvent(int num)
+{
+	for (int i = 0; i < num; ++i) {
+		SpawnEnemy();
+	}
+}
+
 long long GameHandler::GetStartTime() const
 {
 	return startTime;
+}
+
+void GameHandler::ResetStartTime()
+{
+	startTime = Tools::Time::GetCurrentEpocMs();
 }
 
 Position GameHandler::GetPlayerFireDestination()
