@@ -7,10 +7,21 @@
 #include <random>
 #include <functional>
 #include <iomanip>
+#include <fstream>
+#include <string>
+#include <filesystem>
+#include <thread>
 
 #include "raylib.h"
 #include "raymath.h"
 #include "Quadtree.h"
+
+// Other properties
+#ifdef _DEBUG
+#define EVENTS_PATH "../Events/"
+#else
+#define EVENTS_PATH "Events/"
+#endif
 
 // Window properties
 #define WIDTH 1280
@@ -37,7 +48,7 @@
 
 // Health
 #define DEFAULT_PLAYER_HEALTH 100
-#define DEFAULT_ZOMBIE_HEALTH 1
+#define DEFAULT_ZOMBIE_HEALTH 50
 
 // Damage
 #define DEFAULT_ZOMBIE_DAMAGE 2
@@ -272,4 +283,19 @@ enum TextureName {
 	MAIN_MENU_BACKGROUND_TEXTURE,
 	ALT_MENU_BACKGROUND_TEXTURE,
 	CHARACTER_SELECT_BORDER_TEXTURE
+};
+
+template<typename T>
+struct Event {
+	int id;
+	std::string name;
+	int time;
+
+	std::map<T, std::vector<int>> enemies;
+};
+
+// TODO: change enums to enum classes, seems to enable the use of the same enum values
+enum EnemyType
+{
+	ENEMY_ZOMBIE
 };
