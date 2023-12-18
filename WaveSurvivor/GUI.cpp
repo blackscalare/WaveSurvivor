@@ -46,24 +46,34 @@ void GUI::HUD::DrawTime(long long startTime)
 void GUI::HealthBar::DrawPlayerHealthBar(Player* player)
 {
 	int health = player->GetHealth();
+	int maxPlayerHealth = player->GetMaxHealth();
 	Position pos = player->GetPosition();
+	float barWidth = 100.0f;
+
+	float normalizedHealth = (float)health / (float)maxPlayerHealth;
+	float healthWidth = normalizedHealth * barWidth;
 
 	Position playerScreenPos = Tools::ScreenSpace::GetWorldToScreen(pos, pos);
-	Position healthBarPos = Position(playerScreenPos.x - (DEFAULT_PLAYER_HEALTH / 2), playerScreenPos.y - DEFAULT_PLAYER_HEIGHT - 5);
+	Position healthBarPos = Position((playerScreenPos.x + DEFAULT_PLAYER_WIDTH / 2) - (barWidth / 2), playerScreenPos.y - DEFAULT_PLAYER_HEIGHT - 5);
 
-	DrawRectangle(healthBarPos.x, healthBarPos.y, health, 10, GREEN);
-	DrawRectangleLines(healthBarPos.x, healthBarPos.y, DEFAULT_PLAYER_HEALTH, 10, WHITE);
+	DrawRectangle(healthBarPos.x, healthBarPos.y, healthWidth, 10, GREEN);
+	DrawRectangleLines(healthBarPos.x, healthBarPos.y, barWidth, 10, WHITE);
 
 }
 
 void GUI::HealthBar::DrawEnemyHealthBar(Zombie* zombie, Position playerPos)
 {
 	int health = zombie->GetHealth();
+	int maxZombieHealth = zombie->GetMaxHealth();
 	Position pos = zombie->GetPosition();
+	float barWidth = 30.0f;
+
+	float normalizedHealth = (float)health / (float)maxZombieHealth;
+	float healthWidth = normalizedHealth * barWidth;
 
 	Position zombieScreenPos = Tools::ScreenSpace::GetWorldToScreen(pos, playerPos);
-	Position healthBarPos = Position(zombieScreenPos.x - (DEFAULT_ZOMBIE_HEALTH / 2), zombieScreenPos.y - (DEFAULT_ZOMBIE_RADIUS * 2) - 5);
+	Position healthBarPos = Position((zombieScreenPos.x + DEFAULT_ZOMBIE_WIDTH / 2) - (barWidth / 2), zombieScreenPos.y - DEFAULT_ZOMBIE_HEIGHT);
 
-	DrawRectangle(healthBarPos.x, healthBarPos.y, health, 10, RED);
-	DrawRectangleLines(healthBarPos.x, healthBarPos.y, DEFAULT_ZOMBIE_HEALTH, 10, WHITE);
+	DrawRectangle(healthBarPos.x, healthBarPos.y, healthWidth, 5, RED);
+	DrawRectangleLines(healthBarPos.x, healthBarPos.y, barWidth, 5, WHITE);
 }

@@ -23,6 +23,7 @@ public:
 	Hitbox GetHitbox();
 	virtual void UpdateHitbox();
 	bool TakeDamage(int damage);
+	int GetMaxHealth();
 
 protected:
 	int maxHealth;

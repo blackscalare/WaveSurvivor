@@ -55,3 +55,8 @@ bool Character::TakeDamage(int damage)
     health -= damage;
     return health <= 0;
 }
+
+int Character::GetMaxHealth()
+{
+    return maxHealth;
+}
