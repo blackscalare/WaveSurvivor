@@ -1,4 +1,6 @@
 #pragma once
+#define _CRT_SECURE_NO_DEPRECATE
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <map>
 #include <chrono>
@@ -14,7 +16,6 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "Quadtree.h"
 
 // Other properties
 #ifdef _DEBUG
@@ -85,7 +86,9 @@ constexpr const char* CARD_TEXT[] = {
 	"Attack speed",
 	"Health",
 	"Pickup",
-	"Thorn aura"};
+	"Thorn aura"
+};
+
 constexpr const char* CARD_DESCRIPTIIONS[] = {
 	"Move speed +5%",
 	"Damage +5%",
@@ -115,25 +118,30 @@ struct Position
 {
 	int x, y;
 
-	Position() {
+	Position()
+	{
 		x = 0;
 		y = 0;
 	}
 
-	Position(int x, int y) {
+	Position(int x, int y)
+	{
 		this->x = x;
 		this->y = y;
 	}
 
-	friend bool operator==(const Position& lhs, const Position& rhs) {
+	friend bool operator==(const Position& lhs, const Position& rhs)
+	{
 		return (lhs.x == rhs.x) && (lhs.y == rhs.x);
 	}
-	
-	friend bool operator<(const Position& lhs, const Position& rhs) {
+
+	friend bool operator<(const Position& lhs, const Position& rhs)
+	{
 		return (lhs.x < rhs.x) || ((lhs.x == rhs.x) && (lhs.y < rhs.y));
 	}
 
-	Vector2 ToVector() {
+	Vector2 ToVector()
+	{
 		return { (float)x, (float)y };
 	}
 };
@@ -142,25 +150,30 @@ struct Position_f
 {
 	float x, y;
 
-	Position_f() {
+	Position_f()
+	{
 		x = 0;
 		y = 0;
 	}
 
-	Position_f(int x, int y) {
+	Position_f(int x, int y)
+	{
 		this->x = (float)x;
 		this->y = (float)y;
 	}
 
-	friend bool operator==(const Position_f& lhs, const Position_f& rhs) {
+	friend bool operator==(const Position_f& lhs, const Position_f& rhs)
+	{
 		return (lhs.x == rhs.x) && (lhs.y == rhs.x);
 	}
 
-	friend bool operator<(const Position_f& lhs, const Position_f& rhs) {
+	friend bool operator<(const Position_f& lhs, const Position_f& rhs)
+	{
 		return (lhs.x < rhs.x) || ((lhs.x == rhs.x) && (lhs.y < rhs.y));
 	}
 
-	Vector2 ToVector() {
+	Vector2 ToVector()
+	{
 		return { x, y };
 	}
 };
@@ -170,21 +183,25 @@ struct Hitbox
 	Rectangle area;
 	Position* source;
 
-	Hitbox() {
+	Hitbox()
+	{
 		area = { 0, 0 };
 		source = new Position(0, 0);
 	}
 
-	Hitbox(Position* source, float width, float height) {
+	Hitbox(Position* source, float width, float height)
+	{
 		this->source = source;
 		area = { (float)source->x, (float)source->y, width, height };
 	}
 
-	bool IsTouching(Hitbox other) {
+	bool IsTouching(Hitbox other)
+	{
 		return CheckCollisionRecs(area, other.area);
 	}
 
-	void UpdateHitbox() {
+	void UpdateHitbox()
+	{
 		area.x = (float)source->x;
 		area.y = (float)source->y;
 	}
@@ -211,7 +228,8 @@ struct GlobalMapData
 	InstanceType type;
 };
 
-enum CardType {
+enum CardType
+{
 	SPEED = 0,
 	DAMAGE,
 	ATTACK_SPEED,
@@ -220,13 +238,15 @@ enum CardType {
 	THORN_AURA
 };
 
-struct CardEvent {
+struct CardEvent
+{
 	int selectedCard;
 	bool cardAction;
 	CardType type;
 };
 
-struct Card {
+struct Card
+{
 	int id;
 	Texture2D* image;
 	const char* text;
@@ -237,7 +257,8 @@ struct Card {
 	CardType type;
 };
 
-struct MenuButton {
+struct MenuButton
+{
 	int id;
 	const char* text;
 	Rectangle sourceRec;
@@ -245,7 +266,8 @@ struct MenuButton {
 	int state = 0;
 };
 
-struct CharacterSelectBox {
+struct CharacterSelectBox
+{
 	int id;
 	const char* text;
 	Rectangle sourceRec;
@@ -254,19 +276,22 @@ struct CharacterSelectBox {
 	int state = 0;
 };
 
-enum RenderState {
+enum RenderState
+{
 	GAME,
 	MAIN_MENU,
 	OPTIONS,
 	LEVEL_UP
 };
 
-enum SpellType {
+enum SpellType
+{
 	SPELL_BOLT,
 	SPELL_THORN_AURA
 };
 
-enum TextureName {
+enum TextureName
+{
 	BACKGROUND_TEXTURE,
 	PLAYER_TEXTURE,
 	ZOMBIE_TEXTURE,
@@ -291,7 +316,8 @@ enum ShaderName
 };
 
 template<typename T>
-struct Event {
+struct Event
+{
 	int id;
 	std::string name;
 	int time;
@@ -303,4 +329,12 @@ struct Event {
 enum EnemyType
 {
 	ENEMY_ZOMBIE
+};
+
+enum GameState
+{
+	RUNNING,
+	PAUSED,
+	PLAYER_DEAD,
+	WIN
 };

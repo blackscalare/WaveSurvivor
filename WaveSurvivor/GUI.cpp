@@ -18,19 +18,16 @@ void GUI::HUD::DrawXPBar(Player* player)
 
 void GUI::HUD::DrawZombiesKilled(int zombiesKilled)
 {
-	char zombiesKilledString[8];
-	snprintf(zombiesKilledString, 8, "%d", zombiesKilled);
+	char zombiesKilledString[16];
+	snprintf(zombiesKilledString, 16, "%d", zombiesKilled);
 	DrawText(zombiesKilledString, TextLength(zombiesKilledString) + 10, 20, 20, WHITE);
 }
 
-void GUI::HUD::DrawTime(long long startTime)
+void GUI::HUD::DrawTime(long long elapsedTime)
 {
-	long long currentTime = Tools::Time::GetCurrentEpocMs();
-	long long diff = currentTime - startTime;
-
-	int hours = static_cast<int>(diff / 3600000); // 1 hour = 3600000 milliseconds
-	int minutes = static_cast<int>((diff % 3600000) / 60000); // 1 minute = 60000 milliseconds
-	int seconds = static_cast<int>((diff % 60000) / 1000); // 1 second = 1000 milliseconds
+	int hours = static_cast<int>(elapsedTime / 3600000); // 1 hour = 3600000 milliseconds
+	int minutes = static_cast<int>((elapsedTime % 3600000) / 60000); // 1 minute = 60000 milliseconds
+	int seconds = static_cast<int>((elapsedTime % 60000) / 1000); // 1 second = 1000 milliseconds
 
 	std::ostringstream formattedTime;
 
@@ -76,4 +73,52 @@ void GUI::HealthBar::DrawEnemyHealthBar(Zombie* zombie, Position playerPos)
 
 	DrawRectangle(healthBarPos.x, healthBarPos.y, healthWidth, 5, RED);
 	DrawRectangleLines(healthBarPos.x, healthBarPos.y, barWidth, 5, WHITE);
+}
+
+void GUI::Debug::DrawDebugUI()
+{
+	//const char* WindowBox000Text = "Debug";    // WINDOWBOX: WindowBox000
+	//const char* CheckBox_GodModeText = "Godmode";    // CHECKBOXEX: CheckBox_GodMode
+	//const char* Button_SpawnEnemyText = "Spawn enemy";    // BUTTON: Button_SpawnEnemy
+	//const char* Button_SpawnChestText = "Spawn chest";    // BUTTON: Button_SpawnChest
+	//const char* Button_TriggerCardsText = "Trigger cards";    // BUTTON: Button_TriggerCards
+	//const char* Spinner_LevelText = "Level";
+
+	//Vector2 anchor01 = { 920, 48 };            // ANCHOR ID:1
+	//bool WindowBox000Active = true;            // WindowBox: WindowBox000
+	//bool CheckBox_GodModeChecked = false;            // CheckBoxEx: CheckBox_GodMode
+	//bool Spinner_LevelEditMode = false;
+	//int Spinner_LevelValue = 0;            // Spinner: Spinner_Level
+
+	//// Define controls rectangles
+	//Rectangle layoutRecs[6] = {
+	//	{
+	//	 anchor01.x + -56, anchor01.y + 0, 216, 192
+	//	},    // WindowBox: WindowBox000
+	//	{
+	//	anchor01.x + -8, anchor01.y + 40, 16, 16
+	//	},    // CheckBoxEx: CheckBox_GodMode
+	//	{
+	//	anchor01.x + -8, anchor01.y + 72, 112, 16
+	//	},    // Spinner: Spinner_Level
+	//	{
+	//	anchor01.x + -8, anchor01.y + 104, 112, 16
+	//	},    // Button: Button_SpawnEnemy
+	//	{
+	//	anchor01.x + -8, anchor01.y + 128, 112, 16
+	//	},    // Button: Button_SpawnChest
+	//	{
+	//	anchor01.x + -8, anchor01.y + 152, 112, 16
+	//	},    // Button: Button_TriggerCards
+	//};
+
+	//if (WindowBox000Active)
+	//{
+	//	WindowBox000Active = !GuiWindowBox(layoutRecs[0], WindowBox000Text);
+	//	GuiCheckBox(layoutRecs[1], CheckBox_GodModeText, &CheckBox_GodModeChecked);
+	//	if (GuiSpinner(layoutRecs[2], Spinner_LevelText, &Spinner_LevelValue, 0, 100, Spinner_LevelEditMode)) Spinner_LevelEditMode = !Spinner_LevelEditMode;
+	//	if (GuiButton(layoutRecs[3], Button_SpawnEnemyText)) /*Button()*/void;
+	//	if (GuiButton(layoutRecs[4], Button_SpawnChestText)) /*Button()*/void;
+	//	if (GuiButton(layoutRecs[5], Button_TriggerCardsText)) /*Button()*/void;
+	//}
 }
