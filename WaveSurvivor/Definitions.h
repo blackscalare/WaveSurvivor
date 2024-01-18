@@ -13,6 +13,9 @@
 #include <string>
 #include <filesystem>
 #include <thread>
+#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #include "raylib.h"
 #include "raymath.h"
@@ -36,8 +39,8 @@
 #define DEFAULT_ZOMBIE_WIDTH 20
 #define DEFAULT_ZOMBIE_HEIGHT 20
 #define DEFAULT_ZOMBIE_RADIUS 10
-#define DEFAULT_PROJECTILE_WIDTH 5
-#define DEFAULT_PROJECTILE_HEIGHT 5
+#define DEFAULT_PROJECTILE_WIDTH 24
+#define DEFAULT_PROJECTILE_HEIGHT 24
 #define DEFAULT_XP_ORB_RADIUS 10
 #define WORLD_WIDTH 10000
 #define WORLD_HEIGHT 10000
@@ -304,6 +307,7 @@ enum TextureName
 	FIRE_SPEED_UPGRADE_TEXTURE,
 	PICKUP_UPGRADE_TEXTURE,
 	THORN_AURA_TEXTURE,
+	BOLT_TEXTURE,
 	BUTTON_TEXTURE,
 	MAIN_MENU_BACKGROUND_TEXTURE,
 	ALT_MENU_BACKGROUND_TEXTURE,
@@ -328,6 +332,7 @@ struct Event
 // TODO: change enums to enum classes, seems to enable the use of the same enum values
 enum EnemyType
 {
+	ENEMY_ERROR,
 	ENEMY_ZOMBIE
 };
 

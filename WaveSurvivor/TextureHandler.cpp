@@ -13,7 +13,11 @@ TextureHandler::TextureHandler()
 	moveSpeedUpgradeTexture			= LoadTexture("textures/moveSpeedUpgradeTexture.png");
 	fireSpeedUpgradeTexture			= LoadTexture("textures/fireSpeedUpgradeTexture.png");
 	pickupUpgradeTexture			= LoadTexture("textures/pickupUpgradeTexture.png");
+
 	thornAuraTexture				= LoadTexture("textures/thornAuraTexture.png");
+	boltTexture						= LoadTexture("textures/boltTexture.png");
+
+
 	buttonTexture					= LoadTexture("textures/buttonTexture.png");
 	mainMenuBackgroundTexture		= LoadTexture("textures/mainMenuBackgroundTexture.png");
 	altMenuBackgroundTexture		= LoadTexture("textures/altMenuBackground.png");
@@ -30,7 +34,10 @@ TextureHandler::TextureHandler()
 	textures.insert(std::make_pair(MOVE_SPEED_UPGRADE_TEXTURE, &moveSpeedUpgradeTexture));
 	textures.insert(std::make_pair(FIRE_SPEED_UPGRADE_TEXTURE, &fireSpeedUpgradeTexture));
 	textures.insert(std::make_pair(PICKUP_UPGRADE_TEXTURE, &pickupUpgradeTexture));
+
 	textures.insert(std::make_pair(THORN_AURA_TEXTURE, &thornAuraTexture));
+	textures.insert(std::make_pair(BOLT_TEXTURE, &boltTexture));
+
 	textures.insert(std::make_pair(BUTTON_TEXTURE, &buttonTexture));
 	textures.insert(std::make_pair(MAIN_MENU_BACKGROUND_TEXTURE, &mainMenuBackgroundTexture));
 	textures.insert(std::make_pair(ALT_MENU_BACKGROUND_TEXTURE, &altMenuBackgroundTexture));
@@ -43,15 +50,16 @@ TextureHandler::TextureHandler()
 
 TextureHandler::~TextureHandler()
 {
-	for (auto& texture : textures) {
-		UnloadTexture(*texture.second);
-		delete texture.second;
-	}
+	// TODO fix this, it doesn't work
+	//for (auto& texture : textures) {
+	//	UnloadTexture(*texture.second);
+	//	if (texture.second != nullptr) delete texture.second;
+	//}
 
-	for (auto& shader : shaders) {
-		UnloadShader(*shader.second);
-		delete shader.second;
-	}
+	//for (auto& shader : shaders) {
+	//	UnloadShader(*shader.second);
+	//	if(shader.second != nullptr) delete shader.second;
+	//}
 }
 
 Texture2D* TextureHandler::GetTexture(TextureName name)

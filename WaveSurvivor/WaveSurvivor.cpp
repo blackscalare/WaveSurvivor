@@ -49,6 +49,7 @@ void WaveSurvivor::Init()
 	eventHandler->LoadEvents();
 	textureHandler = new TextureHandler();
 	gameHandler = new GameHandler(textureHandler, eventHandler);
+	gameHandler->BindGameOverCallback(std::bind(&WaveSurvivor::GameOverCallback, this));
 	levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
 	levelUpScreenHandler->BindCallback(std::bind(&WaveSurvivor::LevelUpScreenCardCallback, this));
 	optionsMenu = new OptionsMenu();
@@ -66,6 +67,7 @@ void WaveSurvivor::MainMenuButtonCallback(int buttonId)
 	case MAIN_MENU_BUTTON_START_ID:
 		renderer->SetState(GAME);
 		gameHandler->ResetStartTime();
+		if (gameHandler->GetState() != RUNNING) gameHandler->SetState(RUNNING);
 		break;
 	case MAIN_MENU_BUTTON_OPTIONS_ID:
 		renderer->SetState(OPTIONS);
@@ -88,4 +90,9 @@ void WaveSurvivor::LevelUpScreenCardCallback()
 	renderer->SetState(GAME);
 	gameHandler->UnpauseGame();
 	levelUpScreenHandler->Reset();
+}
+
+void WaveSurvivor::GameOverCallback()
+{
+	renderer->SetState(MAIN_MENU);
 }

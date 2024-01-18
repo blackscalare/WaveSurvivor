@@ -25,7 +25,7 @@ public:
 	Position GetPlayerPosition();
 	std::vector<Object> GetObjectsInViewport();
 	std::vector<Zombie*> GetEnemiesInViewport();
-	std::vector<Position_f> GetProjectilesInViewport();
+	std::vector<Projectile*> GetProjectilesInViewport();
 	Position GetPlayerFireDestination();
 	bool GetDebugMode();
 	World* GetWorldPtr();
@@ -42,7 +42,11 @@ public:
 	void PauseGame();
 	void UnpauseGame();
 	long long GetElapsedTime() const;
+	void SetState(GameState state);
 	GameState GetState();
+	void BindGameOverCallback(std::function<void(void)> fn) {
+		gameOverCallback = fn;
+	}
 
 private:
 	void Initialize();
@@ -64,7 +68,6 @@ private:
 	void HandleEvents();
 	void SpawnEnemiesFromEvent(int num);
 	void HandleTime();
-	void SetState(GameState state);
 
 	bool debugMode;
 	int enemyId;
@@ -84,6 +87,7 @@ private:
 	long long startTime;
 	long long elapsedTime;
 	GameState currentState;
+	std::function<void(void)> gameOverCallback;
 	//static quadtree::Box<float> GetBox(Node* node)
 	//{
 	//	return node->box;

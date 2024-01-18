@@ -18,10 +18,22 @@ World::~World()
 	}
 
 	if (zombies != nullptr) {
+		if (zombies->size() > 0) {
+			for (auto& pair : *zombies) {
+				if(pair.second != nullptr)
+					delete pair.second;
+			}
+		}
 		delete zombies;
 	}
 
 	if (projectiles != nullptr) {
+		if (projectiles->size() > 0) {
+			for (auto& pair : *projectiles) {
+				if (pair.second != nullptr)
+					delete pair.second;
+			}
+		}
 		delete projectiles;
 	}
 }

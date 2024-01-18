@@ -28,6 +28,7 @@ void GameHandler::Update()
 			break;
 		case PLAYER_DEAD:
 			// Handle player dead state
+			currentState = PAUSED;
 			break;
 		case WIN:
 			// Handle win state
@@ -92,7 +93,7 @@ std::vector<Zombie*> GameHandler::GetEnemiesInViewport()
 	return objectsInViewport;
 }
 
-std::vector<Position_f> GameHandler::GetProjectilesInViewport()
+std::vector<Projectile*> GameHandler::GetProjectilesInViewport()
 {
 	std::map<int, Projectile*>* projectilesPtr = world->GetProjectilesPtr();
 	Position playerPos = world->GetPlayerPtr()->GetPosition();
@@ -104,14 +105,14 @@ std::vector<Position_f> GameHandler::GetProjectilesInViewport()
 	Position playerPosXRange = { xStart, xEnd };
 	Position playerPosYRange = { yStart, yEnd };
 
-	std::vector<Position_f> projectilesInViewport = {};
+	std::vector<Projectile*> projectilesInViewport = {};
 
 	for (const auto& pair : *projectilesPtr) {
-		Projectile p = *pair.second;
-		Position_f pos = p.GetPosition();
+		Projectile* p = pair.second;
+		Position_f pos = p->GetPosition();
 		if ((pos.x >= playerPosXRange.x && pos.x <= playerPosXRange.y) &&
 			(pos.y >= playerPosYRange.x && pos.y <= playerPosYRange.y)) {
-			projectilesInViewport.push_back(pos);
+			projectilesInViewport.push_back(p);
 		}
 	}
 
@@ -121,6 +122,7 @@ std::vector<Position_f> GameHandler::GetProjectilesInViewport()
 void GameHandler::Initialize()
 {
 	enemyId = 0;
+	if (world != nullptr) delete world;
 	world = new World;
 	lastTimeEnemySpawned = 0;
 	currentDifficulty = EASY;
@@ -261,7 +263,8 @@ void GameHandler::HandlePlayer()
 	)) {
 		world->GetPlayerPtr()->TakeDamage(DEFAULT_ZOMBIE_DAMAGE);
 		if (world->GetPlayerPtr()->GetHealth() <= 0) {
-			gameOver = true;
+			gameOverCallback();
+			Initialize();
 		}
 	}
 
@@ -471,6 +474,7 @@ void GameHandler::HandleEvents()
 					switch (et) {
 					case ENEMY_ZOMBIE: {
 						// TODO: Is this safe? Prevents lock when spawning lots of enemies
+						// causes issue on game over
 						std::thread thread(&GameHandler::SpawnEnemiesFromEvent, this, num);
 						thread.detach();
 						break;
@@ -492,6 +496,7 @@ void GameHandler::HandleEvents()
 
 void GameHandler::SpawnEnemiesFromEvent(int num)
 {
+	// TODO this keeps spawning since world is recreated while this thread is still running
 	for (int i = 0; i < num; ++i) {
 		SpawnEnemy();
 	}

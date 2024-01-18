@@ -127,6 +127,7 @@ std::map<EnemyType, std::vector<int>> EventParser::ParseSpawnStr(std::string& sp
 
 		for (int i = 0; i < keys.size(); ++i) {
 			EnemyType key = ConvertStringToEnemyType(keys[i]);
+			if (key == ENEMY_ERROR) continue;
 			if (spawnMap.find(key) != spawnMap.end()) {
 				spawnMap[key].push_back(values[i]);
 			}
@@ -150,4 +151,5 @@ EnemyType EventParser::ConvertStringToEnemyType(std::string enemyStr)
 		return ENEMY_ZOMBIE;
 	}
 	// TODO handle errors
+	return ENEMY_ERROR;
 }

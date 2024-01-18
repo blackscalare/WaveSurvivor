@@ -21,6 +21,7 @@ private:
 	void Init();
 	void MainMenuButtonCallback(int buttonId);
 	void LevelUpScreenCardCallback();
+	void GameOverCallback();
 
 	Renderer* renderer;
 	GameHandler* gameHandler;

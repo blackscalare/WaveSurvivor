@@ -20,7 +20,7 @@ public:
 private:
 	void DrawObjects(std::vector<Object> objectsInViewport);
 	void DrawEnemies(std::vector<Zombie*> enemiesInViewport);
-	void DrawProjectiles(std::vector<Position_f> projectilesInViewport);
+	void DrawProjectiles(std::vector<Projectile*> projectilesInViewport);
 	void DrawDebug();
 	void DrawPlayer();
 	void DrawGUI();

@@ -47,10 +47,6 @@ void Renderer::Render()
 	while (!WindowShouldClose()) {
 		ClearBackground(BLACK);
 
-		if (gameHandler->GetGameOver()) {
-			ReturnToMainMenu();
-		}
-
 		if (gameHandler->PlayerJustLeveledUp()) {
 			currentState = LEVEL_UP;
 			gameHandler->PauseGame();
@@ -138,13 +134,20 @@ void Renderer::DrawEnemies(std::vector<Zombie*> enemiesInViewport)
 	}
 }
 
-void Renderer::DrawProjectiles(std::vector<Position_f> projectilesInViewport)
+void Renderer::DrawProjectiles(std::vector<Projectile*> projectilesInViewport)
 {
 	if (projectilesInViewport.size() > 0) {
-		for (Position_f o : projectilesInViewport) {
-			Position_f screenPos = Tools::ScreenSpace::GetWorldToScreen_f(o, gameHandler->GetPlayerPosition());
+		for (Projectile* projectile : projectilesInViewport) {
+			Position_f pos = projectile->GetPosition();
+			Position_f screenPos = Tools::ScreenSpace::GetWorldToScreen_f(pos, gameHandler->GetPlayerPosition());
 
-			DrawRectangleV(screenPos.ToVector(), { DEFAULT_PROJECTILE_WIDTH, DEFAULT_PROJECTILE_HEIGHT }, YELLOW);
+			//DrawRectangleV(screenPos.ToVector(), { DEFAULT_PROJECTILE_WIDTH, DEFAULT_PROJECTILE_HEIGHT }, YELLOW);
+			//DrawTextureV(*textureHandler->GetTexture(BOLT_TEXTURE), screenPos.ToVector(), WHITE);
+			// Rotation is weird
+			float deltaX = projectile->GetDestination().x - pos.x;
+			float deltaY = projectile->GetDestination().y - pos.y;
+			float rotation = std::atan2(deltaY, deltaX) * (180.0f / M_PI) + 90.0f;
+			DrawTextureEx(*textureHandler->GetTexture(BOLT_TEXTURE), screenPos.ToVector(), rotation, 1.f, WHITE);
 		}
 	}
 }
@@ -222,6 +225,7 @@ void Renderer::DrawBackground()
 
 void Renderer::ReturnToMainMenu()
 {
+	currentState = MAIN_MENU;
 }
 
 void Renderer::RenderGame()
@@ -230,7 +234,7 @@ void Renderer::RenderGame()
 
 	std::vector<Object> objectsInViewport = gameHandler->GetObjectsInViewport();
 	std::vector<Zombie*> enemiesInViewport = gameHandler->GetEnemiesInViewport();
-	std::vector<Position_f> projectilesInViewport = gameHandler->GetProjectilesInViewport();
+	std::vector<Projectile*> projectilesInViewport = gameHandler->GetProjectilesInViewport();
 	
 	DrawBackground();
 	DrawGUI();

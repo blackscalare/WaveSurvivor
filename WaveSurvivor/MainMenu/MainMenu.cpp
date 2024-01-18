@@ -1,4 +1,5 @@
 #include "MainMenu.h"
+#include "../Logger.h"
 
 #define BUTTON_PADDING 120
 
@@ -18,6 +19,7 @@ void MainMenu::Update()
 			else button->state = 1;
 			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 				// Handle click event
+				Logger::Debug("Clicked menu button", button->id);
 				callback(button->id);
 			}
 		}

@@ -22,7 +22,10 @@ private:
 	Texture2D moveSpeedUpgradeTexture;
 	Texture2D fireSpeedUpgradeTexture;
 	Texture2D pickupUpgradeTexture;
+	
 	Texture2D thornAuraTexture;
+	Texture2D boltTexture;
+
 	Texture2D buttonTexture;
 	Texture2D mainMenuBackgroundTexture;
 	Texture2D altMenuBackgroundTexture;
