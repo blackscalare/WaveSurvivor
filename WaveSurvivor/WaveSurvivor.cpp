@@ -8,6 +8,29 @@ WaveSurvivor::WaveSurvivor()
 
 WaveSurvivor::~WaveSurvivor()
 {
+	if (eventHandler != nullptr) {
+		delete eventHandler;
+	}
+
+	if (textureHandler != nullptr) {
+		delete textureHandler;
+	}
+
+	if (gameHandler != nullptr) {
+		delete gameHandler;
+	}
+
+	if (levelUpScreenHandler != nullptr) {
+		delete levelUpScreenHandler;
+	}
+
+	if (mainMenu != nullptr) {
+		delete mainMenu;
+	}
+
+	if (renderer != nullptr) {
+		delete renderer;
+	}
 }
 
 int WaveSurvivor::Run()

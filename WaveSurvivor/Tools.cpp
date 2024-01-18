@@ -77,21 +77,14 @@ int Tools::Random::GenerateRandomCoordinate(int start, int maxDistance)
 Position Tools::Random::GenerateRandomPosition(int minX, int maxX, int minY, int maxY)
 {
     Position pos;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int>distrX(minX, maxX);
-    std::uniform_int_distribution<int>distrY(minY, maxY);
-
-    pos.x = distrX(gen);
-    pos.y = distrY(gen);
+    // TODO: Has to set the seed?
+    pos.x = GetRandomValue(minX, maxX);
+    pos.y = GetRandomValue(minY, maxY);
     return pos;
 }
 
 int Tools::Random::GenerateRandomSign()
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int>distr(0, 1);
-    int randomValue = distr(gen);
+    int randomValue = GetRandomValue(0, 1);
     return randomValue == 0 ? -1 : 1;
 }

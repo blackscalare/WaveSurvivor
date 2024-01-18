@@ -41,6 +41,7 @@ namespace Tools
 	class Random
 	{
 	public:
+		// UNUSED TODO: remove
 		static int GenerateRandomCoordinate(int start, int maxDistance);
 		static Position GenerateRandomPosition(int minX, int maxX, int minY, int maxY);
 		static int GenerateRandomSign();

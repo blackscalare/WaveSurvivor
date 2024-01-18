@@ -39,6 +39,9 @@ public:
 	int GetZombiesKilled() const;
 	long long GetStartTime() const;
 	void ResetStartTime();
+	void PauseGame();
+	void UnpauseGame();
+	long long GetElapsedTime() const;
 
 private:
 	void Initialize();
@@ -59,6 +62,8 @@ private:
 	void UpdateZombiesKilled();
 	void HandleEvents();
 	void SpawnEnemiesFromEvent(int num);
+	void HandleTime();
+	void SetState(GameState state);
 
 	bool debugMode;
 	int enemyId;
@@ -76,6 +81,8 @@ private:
 	long long zombiesKilled = 0;
 	bool playerIsMoving;
 	long long startTime;
+	long long elapsedTime;
+	GameState currentState;
 	//static quadtree::Box<float> GetBox(Node* node)
 	//{
 	//	return node->box;

@@ -35,12 +35,14 @@ void Renderer::Render()
 
 		if (gameHandler->PlayerJustLeveledUp()) {
 			currentState = LEVEL_UP;
+			gameHandler->PauseGame();
 			gameHandler->SetPlayerJustLeveledUp(false);
 		}
 
 		if (gameHandler->PlayerJustOpenedChest()) {
 			// TODO this should be very similar to the level up screen but have other things?
 			currentState = LEVEL_UP;
+			gameHandler->PauseGame();
 			gameHandler->SetPlayerJustOpenedChest(false);
 		}
 
@@ -138,6 +140,8 @@ void Renderer::DrawDebug()
 		Position playerCenter = Tools::Shape::GetRectangleCenter(centerX, centerY, DEFAULT_PLAYER_WIDTH, DEFAULT_PLAYER_HEIGHT);
 		DrawLine(playerCenter.x, playerCenter.y, screenPos.x, screenPos.y, GREEN);
 	}
+
+	GUI::Debug::DrawDebugUI();
 }
 
 void Renderer::DrawPlayer()
@@ -177,7 +181,7 @@ void Renderer::DrawGUI()
 {
 	GUI::HUD::DrawXPBar(gameHandler->GetWorldPtr()->GetPlayerPtr());
 	GUI::HUD::DrawZombiesKilled(gameHandler->GetZombiesKilled());
-	GUI::HUD::DrawTime(gameHandler->GetStartTime());
+	GUI::HUD::DrawTime(gameHandler->GetElapsedTime());
 }
 
 void Renderer::DrawBackground()
@@ -200,8 +204,7 @@ void Renderer::ReturnToMainMenu()
 
 void Renderer::RenderGame()
 {
-	if(currentState != LEVEL_UP)
-		gameHandler->Update();
+	gameHandler->Update();
 
 	std::vector<Object> objectsInViewport = gameHandler->GetObjectsInViewport();
 	std::vector<Zombie*> enemiesInViewport = gameHandler->GetEnemiesInViewport();
@@ -245,6 +248,7 @@ void Renderer::RenderLevelUpScreen()
 	if (levelUpScreenHandler->GetCardEvent().cardAction) {
 		currentState = GAME;
 		levelUpScreenHandler->Reset();
+		gameHandler->UnpauseGame();
 	}
 }
 

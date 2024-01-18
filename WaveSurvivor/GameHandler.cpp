@@ -14,11 +14,26 @@ GameHandler::~GameHandler()
 
 void GameHandler::Update()
 {
-	HandlePlayer();
-	HandleEnemies();
-	HandleProjectiles();
-	HandleGeneralInput();
-	HandleEvents();
+	switch (currentState) {
+		case RUNNING:
+			HandlePlayer();
+			HandleEnemies();
+			HandleProjectiles();
+			HandleGeneralInput();
+			HandleEvents();
+			HandleTime();
+			break;
+		case PAUSED:
+			// Modify start time so it seems like no time passes
+			break;
+		case PLAYER_DEAD:
+			// Handle player dead state
+			break;
+		case WIN:
+			// Handle win state
+			break;
+	}
+	
 }
 
 Position GameHandler::GetPlayerPosition()
@@ -139,7 +154,7 @@ void GameHandler::HandlePickup()
 				break;
 			case XP_ORB: {
 				XPOrb* xpOrb = dynamic_cast<XPOrb*>(o);
-				playerJustLeveledUp = world->GetPlayerPtr()->GainXp(xpOrb->GetXpValue());
+				SetPlayerJustLeveledUp(world->GetPlayerPtr()->GainXp(xpOrb->GetXpValue()));
 				switch (world->GetPlayerPtr()->GetLevel()) {
 				case 3:
 					currentDifficulty = MEDIUM;
@@ -437,10 +452,7 @@ void GameHandler::UpdateZombiesKilled()
 
 void GameHandler::HandleEvents()
 {
-	long long currentTime = Tools::Time::GetCurrentEpocMs();
-	long long timePassed = currentTime - startTime;
-	
-	int seconds = static_cast<int>((timePassed % 60000) / 1000); // 1 second = 1000 milliseconds
+	int seconds = static_cast<int>((elapsedTime % 60000) / 1000); // 1 second = 1000 milliseconds
 
 	std::vector<Event<EnemyType>> events = eventHandler->GetEvents();
 
@@ -483,6 +495,32 @@ void GameHandler::SpawnEnemiesFromEvent(int num)
 	for (int i = 0; i < num; ++i) {
 		SpawnEnemy();
 	}
+}
+
+void GameHandler::HandleTime()
+{
+	elapsedTime = Tools::Time::GetCurrentEpocMs() - startTime;
+}
+
+void GameHandler::PauseGame()
+{
+	currentState = PAUSED;
+}
+
+void GameHandler::UnpauseGame()
+{
+	startTime = Tools::Time::GetCurrentEpocMs() - elapsedTime;
+	currentState = RUNNING;
+}
+
+long long GameHandler::GetElapsedTime() const
+{
+	return elapsedTime;
+}
+
+void GameHandler::SetState(GameState state)
+{
+	currentState = state;
 }
 
 long long GameHandler::GetStartTime() const
@@ -528,6 +566,9 @@ bool GameHandler::PlayerJustOpenedChest()
 void GameHandler::SetPlayerJustLeveledUp(bool val)
 {
 	playerJustLeveledUp = val;
+	if (val) {
+		currentState = PAUSED;
+	}
 }
 
 void GameHandler::SetPlayerJustOpenedChest(bool val)
