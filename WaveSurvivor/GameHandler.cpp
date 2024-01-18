@@ -518,6 +518,11 @@ long long GameHandler::GetElapsedTime() const
 	return elapsedTime;
 }
 
+GameState GameHandler::GetState()
+{
+	return currentState;
+}
+
 void GameHandler::SetState(GameState state)
 {
 	currentState = state;

@@ -50,6 +50,7 @@ void WaveSurvivor::Init()
 	textureHandler = new TextureHandler();
 	gameHandler = new GameHandler(textureHandler, eventHandler);
 	levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
+	levelUpScreenHandler->BindCallback(std::bind(&WaveSurvivor::LevelUpScreenCardCallback, this));
 	optionsMenu = new OptionsMenu();
 	mainMenu = new MainMenu(textureHandler);
 	mainMenu->BindCallback(std::bind(&WaveSurvivor::MainMenuButtonCallback, this, std::placeholders::_1));
@@ -67,7 +68,10 @@ void WaveSurvivor::MainMenuButtonCallback(int buttonId)
 		gameHandler->ResetStartTime();
 		break;
 	case MAIN_MENU_BUTTON_OPTIONS_ID:
-		Logger::Debug("Implement");
+		renderer->SetState(OPTIONS);
+		if (gameHandler->GetState() == RUNNING) {
+			gameHandler->PauseGame();
+		}
 		break;
 	case MAIN_MENU_BUTTON_EXIT_ID:
 		// TODO: Implement proper shutdown
@@ -77,4 +81,11 @@ void WaveSurvivor::MainMenuButtonCallback(int buttonId)
 	default:
 		Logger::Log(Logger::ERROR, "Main menu button not implemented!");
 	}
+}
+
+void WaveSurvivor::LevelUpScreenCardCallback()
+{
+	renderer->SetState(GAME);
+	gameHandler->UnpauseGame();
+	levelUpScreenHandler->Reset();
 }

@@ -20,6 +20,7 @@ public:
 private:
 	void Init();
 	void MainMenuButtonCallback(int buttonId);
+	void LevelUpScreenCardCallback();
 
 	Renderer* renderer;
 	GameHandler* gameHandler;

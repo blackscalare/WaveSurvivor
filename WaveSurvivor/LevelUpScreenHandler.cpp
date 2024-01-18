@@ -100,6 +100,21 @@ void LevelUpScreenHandler::Update()
 		// Handle card click
 		Logger::Debug("Clicked card", cardEvent.selectedCard);
 		gameHandler->HandleSelectedCard(cards[cardEvent.selectedCard]);
+		callback();
+	}
+
+	// Fade out background
+	DrawRectangle(0, 0, WIDTH, HEIGHT, { 0, 0, 0, 100 });
+
+	for (auto& c : cards) {
+		int cardXMax = c->bounds.x + (c->bounds.x + c->bounds.width);
+		int cardTextX = Tools::Text::CenterTextX(cardXMax, c->text, CARD_TEXT_SIZE);
+		int cardDescriptionX = Tools::Text::CenterTextX(cardXMax, c->description, CARD_DESCRIPTION_SIZE);
+		int cardImageX = (cardXMax - c->image->width) / 2;
+		DrawTextureRec(*cardTexture, c->sourceRec, { c->bounds.x, c->bounds.y }, WHITE);
+		DrawText(c->text, cardTextX, c->bounds.y + CARD_TEXT_SIZE + 20, CARD_TEXT_SIZE, WHITE);
+		DrawTexture(*c->image, cardImageX, c->bounds.y + CARD_TEXT_SIZE + 20 + c->image->height - 30, WHITE);
+		DrawText(c->description, cardDescriptionX, c->bounds.y + CARD_TEXT_SIZE + 20 + c->image->height + 50, CARD_DESCRIPTION_SIZE, WHITE);
 	}
 }
 

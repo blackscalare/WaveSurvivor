@@ -14,6 +14,9 @@ public:
 	void Init(bool reset);
 	void Update();
 	void Reset();
+	void BindCallback(std::function<void(void)> fn) {
+		callback = fn;
+	}
 
 	Texture2D GetCardTexture() const;
 	Rectangle GetSourceRec() const;
@@ -31,6 +34,7 @@ private:
 	Vector2 mousePoint;
 	CardEvent cardEvent;
 	std::vector<Card*> cards;
+	std::function<void(void)> callback;
 
 	Texture2D* cardTexture;
 	Texture2D* damageUpgradeTexture;

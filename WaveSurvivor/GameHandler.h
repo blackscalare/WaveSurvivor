@@ -42,6 +42,7 @@ public:
 	void PauseGame();
 	void UnpauseGame();
 	long long GetElapsedTime() const;
+	GameState GetState();
 
 private:
 	void Initialize();

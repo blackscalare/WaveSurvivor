@@ -20,6 +20,7 @@ Renderer::Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, Lev
 	currentPlayerFrame = 0;
 	playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->height };
 
+	// TODO: move shader logic somewhere else
 	secondsLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "seconds");
 	freqXLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "freqX");
 	freqYLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "freqY");
@@ -28,14 +29,6 @@ Renderer::Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, Lev
 	speedXLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "speedX");
 	speedYLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "speedY");
 	
-	float freqX = 25.0f;
-	float freqY = 25.0f;
-	float ampX = 5.0f;
-	float ampY = 5.0f;
-	float speedX = 8.0f;
-	float speedY = 8.0f;
-
-	float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "size"), &screenSize, SHADER_UNIFORM_VEC2);
 	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), freqXLoc, &freqX, SHADER_UNIFORM_FLOAT);
 	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), freqYLoc, &freqY, SHADER_UNIFORM_FLOAT);
@@ -75,8 +68,7 @@ void Renderer::Render()
 
 			switch (currentState) {
 			case MAIN_MENU:
-				//RenderMainMenu();
-				RenderOptions();
+				RenderMainMenu();
 				break;
 			case GAME:
 			case LEVEL_UP:
@@ -258,28 +250,6 @@ void Renderer::RenderGame()
 void Renderer::RenderLevelUpScreen()
 {
 	levelUpScreenHandler->Update();
-
-	// Fade out background
-	DrawRectangle(0, 0, WIDTH, HEIGHT, { 0, 0, 0, 100 });
-
-	std::vector<Card*> cards = levelUpScreenHandler->GetCards();
-
-	for (auto& c : cards) {
-		int cardXMax = c->bounds.x + (c->bounds.x + c->bounds.width);
-		int cardTextX = Tools::Text::CenterTextX(cardXMax, c->text, CARD_TEXT_SIZE);
-		int cardDescriptionX = Tools::Text::CenterTextX(cardXMax, c->description, CARD_DESCRIPTION_SIZE);
-		int cardImageX = (cardXMax - c->image->width) / 2;
-		DrawTextureRec(levelUpScreenHandler->GetCardTexture(), c->sourceRec, { c->bounds.x, c->bounds.y }, WHITE);
-		DrawText(c->text, cardTextX, c->bounds.y + CARD_TEXT_SIZE + 20, CARD_TEXT_SIZE, WHITE);
-		DrawTexture(*c->image, cardImageX, c->bounds.y + CARD_TEXT_SIZE + 20 + c->image->height - 30, WHITE);
-		DrawText(c->description, cardDescriptionX, c->bounds.y + CARD_TEXT_SIZE + 20 + c->image->height + 50, CARD_DESCRIPTION_SIZE, WHITE);
-	}
-
-	if (levelUpScreenHandler->GetCardEvent().cardAction) {
-		currentState = GAME;
-		levelUpScreenHandler->Reset();
-		gameHandler->UnpauseGame();
-	}
 }
 
 void Renderer::RenderMainMenu()

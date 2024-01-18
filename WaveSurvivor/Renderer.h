@@ -45,6 +45,7 @@ private:
 	Rectangle playerFrameRec;
 	int currentPlayerFrame;
 
+	// TODO move shader logic
 	int secondsLoc;
 	int freqXLoc;
 	int freqYLoc;
@@ -52,5 +53,14 @@ private:
 	int ampYLoc;
 	int speedXLoc;
 	int speedYLoc;
+
+	float freqX = 25.0f;
+	float freqY = 25.0f;
+	float ampX = 5.0f;
+	float ampY = 5.0f;
+	float speedX = 8.0f;
+	float speedY = 8.0f;
+
+	float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 };
 
