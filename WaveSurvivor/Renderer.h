@@ -6,11 +6,12 @@
 #include "Tools.h"
 #include "TextureHandler.h"
 #include "MainMenu/MainMenu.h"
+#include "Menus/OptionsMenu/OptionsMenu.h"
 
 class Renderer
 {
 public:
-	Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, LevelUpScreenHandler* levelUpScreenHandler, MainMenu* mainMenu);
+	Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, LevelUpScreenHandler* levelUpScreenHandler, MainMenu* mainMenu, OptionsMenu* optionsMenu);
 	~Renderer();
 
 	void Render();
@@ -28,12 +29,14 @@ private:
 	void RenderGame();
 	void RenderLevelUpScreen();
 	void RenderMainMenu();
+	void RenderOptions();
 
 	RenderState currentState;
 	GameHandler* gameHandler;
 	LevelUpScreenHandler* levelUpScreenHandler;
 	TextureHandler* textureHandler;
 	MainMenu* mainMenu;
+	OptionsMenu* optionsMenu;
 
 	int centerX;
 	int centerY;

@@ -1,7 +1,7 @@
 #include "Renderer.h"
 #include "Logger.h"
 
-Renderer::Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, LevelUpScreenHandler* levelUpScreenHandler, MainMenu* mainMenu)
+Renderer::Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, LevelUpScreenHandler* levelUpScreenHandler, MainMenu* mainMenu, OptionsMenu* optionsMenu)
 {
 	currentState = MAIN_MENU;
 
@@ -9,6 +9,7 @@ Renderer::Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, Lev
 	this->gameHandler = gameHandler;
 	this->levelUpScreenHandler = levelUpScreenHandler;
 	this->mainMenu = mainMenu;
+	this->optionsMenu = optionsMenu;
 
 	centerX = WIDTH / 2;
 	centerY = HEIGHT / 2;
@@ -74,13 +75,15 @@ void Renderer::Render()
 
 			switch (currentState) {
 			case MAIN_MENU:
-				RenderMainMenu();
+				//RenderMainMenu();
+				RenderOptions();
 				break;
 			case GAME:
 			case LEVEL_UP:
 				RenderGame();
 				break;
 			case OPTIONS:
+				RenderOptions();
 				break;
 			}
 
@@ -282,20 +285,9 @@ void Renderer::RenderLevelUpScreen()
 void Renderer::RenderMainMenu()
 {
 	mainMenu->Update();
-	std::vector<MenuButton*> buttons = mainMenu->GetButtons();
+}
 
-	float scaleX = static_cast<float>(GetScreenWidth()) / static_cast<float>(textureHandler->GetTexture(MAIN_MENU_BACKGROUND_TEXTURE)->width);
-	float scaleY = static_cast<float>(GetScreenHeight()) / static_cast<float>(textureHandler->GetTexture(MAIN_MENU_BACKGROUND_TEXTURE)->height);
-
-	// Calculate the average scale to fit the texture into the window
-	float scale = (scaleX + scaleY) / 2.0f;
-	DrawTextureEx(*textureHandler->GetTexture(MAIN_MENU_BACKGROUND_TEXTURE), { 0,0 }, 0, scale, WHITE);
-
-	for (auto& button : buttons) {
-		// TODO: replace card text sizes with button text sizes
-		int buttonXMax = button->bounds.x + (button->bounds.x + button->bounds.width);
-		int buttonTextX = Tools::Text::CenterTextX(buttonXMax, button->text, CARD_TEXT_SIZE);
-		DrawTextureRec(*textureHandler->GetTexture(BUTTON_TEXTURE), button->sourceRec, { button->bounds.x, button->bounds.y }, WHITE);
-		DrawText(button->text, buttonTextX, button->bounds.y + CARD_TEXT_SIZE + 20, CARD_TEXT_SIZE, WHITE);
-	}
+void Renderer::RenderOptions()
+{
+	optionsMenu->Update();
 }

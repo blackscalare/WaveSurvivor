@@ -1,6 +1,7 @@
 #pragma once
 #include "../Definitions.h"
 #include "../TextureHandler.h"
+#include "../Tools.h"
 
 class MainMenu
 {
