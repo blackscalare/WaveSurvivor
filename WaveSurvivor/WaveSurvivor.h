@@ -8,6 +8,7 @@
 #include "TextureHandler.h"
 #include "MainMenu/MainMenu.h"
 #include "EventHandler.h"
+#include "Menus/OptionsMenu/OptionsMenu.h"
 
 class WaveSurvivor
 {
@@ -25,6 +26,7 @@ private:
 	LevelUpScreenHandler* levelUpScreenHandler;
 	TextureHandler* textureHandler;
 	MainMenu* mainMenu;
+	OptionsMenu* optionsMenu;
 	EventHandler* eventHandler;
 };
 

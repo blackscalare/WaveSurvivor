@@ -50,11 +50,12 @@ void WaveSurvivor::Init()
 	textureHandler = new TextureHandler();
 	gameHandler = new GameHandler(textureHandler, eventHandler);
 	levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
+	optionsMenu = new OptionsMenu();
 	mainMenu = new MainMenu(textureHandler);
 	mainMenu->BindCallback(std::bind(&WaveSurvivor::MainMenuButtonCallback, this, std::placeholders::_1));
 
 	// Initialize everything else before the renderer
-	renderer = new Renderer(textureHandler, gameHandler, levelUpScreenHandler, mainMenu);
+	renderer = new Renderer(textureHandler, gameHandler, levelUpScreenHandler, mainMenu, optionsMenu);
 
 }
 

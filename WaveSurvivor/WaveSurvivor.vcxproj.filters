@@ -25,6 +25,9 @@
     <Filter Include="Menus\CharacterSelect">
       <UniqueIdentifier>{7dc3b1de-1dae-477e-9583-6ead221be5ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Menus\OptionsMenu">
+      <UniqueIdentifier>{5c747269-b6bb-456b-a945-f531472e84be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -95,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="EventHandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\OptionsMenu\OptionsMenu.cpp">
+      <Filter>Menus\OptionsMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="EventHandler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\OptionsMenu\OptionsMenu.h">
+      <Filter>Menus\OptionsMenu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
