@@ -285,6 +285,11 @@ enum TextureName {
 	CHARACTER_SELECT_BORDER_TEXTURE
 };
 
+enum ShaderName
+{
+	XP_ORB_SHADER
+};
+
 template<typename T>
 struct Event {
 	int id;

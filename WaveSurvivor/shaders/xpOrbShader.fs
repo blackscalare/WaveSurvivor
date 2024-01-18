@@ -8,28 +8,30 @@ in vec4 fragColor;
 uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 
-uniform vec2 textureSize;
-uniform float outlineSize;
-uniform vec4 outlineColor;
-
 // Output fragment color
 out vec4 finalColor;
 
-void main()
-{
-    vec4 texel = texture(texture0, fragTexCoord);   // Get texel color
-    vec2 texelScale = vec2(0.0);
-    texelScale.x = outlineSize/textureSize.x;
-    texelScale.y = outlineSize/textureSize.y;
+uniform float seconds;
 
-    // We sample four corner texels, but only for the alpha channel (this is for the outline)
-    vec4 corners = vec4(0.0);
-    corners.x = texture(texture0, fragTexCoord + vec2(texelScale.x, texelScale.y)).a;
-    corners.y = texture(texture0, fragTexCoord + vec2(texelScale.x, -texelScale.y)).a;
-    corners.z = texture(texture0, fragTexCoord + vec2(-texelScale.x, texelScale.y)).a;
-    corners.w = texture(texture0, fragTexCoord + vec2(-texelScale.x, -texelScale.y)).a;
+uniform vec2 size;
 
-    float outline = min(dot(corners, vec4(1.0)), 1.0);
-    vec4 color = mix(vec4(0.0), outlineColor, outline);
-    finalColor = mix(color, texel, texel.a);
+uniform float freqX;
+uniform float freqY;
+uniform float ampX;
+uniform float ampY;
+uniform float speedX;
+uniform float speedY;
+
+void main() {
+    float pixelWidth = 1.0 / size.x;
+    float pixelHeight = 1.0 / size.y;
+    float aspect = pixelHeight / pixelWidth;
+    float boxLeft = 0.0;
+    float boxTop = 0.0;
+
+    vec2 p = fragTexCoord;
+    p.x += cos((fragTexCoord.y - boxTop) * freqX / ( pixelWidth * 750.0) + (seconds * speedX)) * ampX * pixelWidth;
+    p.y += sin((fragTexCoord.x - boxLeft) * freqY * aspect / ( pixelHeight * 750.0) + (seconds * speedY)) * ampY * pixelHeight;
+
+    finalColor = texture(texture0, p)*colDiffuse*fragColor;
 }

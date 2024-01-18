@@ -7,6 +7,7 @@ public:
 	TextureHandler();
 	~TextureHandler();
 	Texture2D* GetTexture(TextureName name);
+	Shader* GetShader(ShaderName shader);
 
 private:
 	std::map<TextureName, Texture2D*> textures;
@@ -26,5 +27,8 @@ private:
 	Texture2D mainMenuBackgroundTexture;
 	Texture2D altMenuBackgroundTexture;
 	Texture2D characterSelectBorderTexture;
+	
+	std::map<ShaderName, Shader*> shaders;
+	Shader xpOrbShader;
 };
 

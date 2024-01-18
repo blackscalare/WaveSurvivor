@@ -35,6 +35,10 @@ TextureHandler::TextureHandler()
 	textures.insert(std::make_pair(MAIN_MENU_BACKGROUND_TEXTURE, &mainMenuBackgroundTexture));
 	textures.insert(std::make_pair(ALT_MENU_BACKGROUND_TEXTURE, &altMenuBackgroundTexture));
 	textures.insert(std::make_pair(CHARACTER_SELECT_BORDER_TEXTURE, &characterSelectBorderTexture));
+
+	xpOrbShader = LoadShader(NULL, TextFormat("shaders/xpOrbShader.fs", 330));
+
+	shaders.insert(std::make_pair(XP_ORB_SHADER, &xpOrbShader));
 }
 
 TextureHandler::~TextureHandler()
@@ -43,9 +47,19 @@ TextureHandler::~TextureHandler()
 		UnloadTexture(*texture.second);
 		delete texture.second;
 	}
+
+	for (auto& shader : shaders) {
+		UnloadShader(*shader.second);
+		delete shader.second;
+	}
 }
 
 Texture2D* TextureHandler::GetTexture(TextureName name)
 {
 	return textures[name];
+}
+
+Shader* TextureHandler::GetShader(ShaderName shader)
+{
+	return shaders[shader];
 }

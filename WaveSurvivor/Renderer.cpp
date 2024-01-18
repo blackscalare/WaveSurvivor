@@ -18,6 +18,30 @@ Renderer::Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, Lev
 	playerFramesSpeed = 7;
 	currentPlayerFrame = 0;
 	playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->height };
+
+	secondsLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "seconds");
+	freqXLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "freqX");
+	freqYLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "freqY");
+	ampXLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "ampX");
+	ampYLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "ampY");
+	speedXLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "speedX");
+	speedYLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "speedY");
+	
+	float freqX = 25.0f;
+	float freqY = 25.0f;
+	float ampX = 5.0f;
+	float ampY = 5.0f;
+	float speedX = 8.0f;
+	float speedY = 8.0f;
+
+	float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
+	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "size"), &screenSize, SHADER_UNIFORM_VEC2);
+	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), freqXLoc, &freqX, SHADER_UNIFORM_FLOAT);
+	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), freqYLoc, &freqY, SHADER_UNIFORM_FLOAT);
+	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), ampXLoc, &ampX, SHADER_UNIFORM_FLOAT);
+	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), ampYLoc, &ampY, SHADER_UNIFORM_FLOAT);
+	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), speedXLoc, &speedX, SHADER_UNIFORM_FLOAT);
+	SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), speedYLoc, &speedY, SHADER_UNIFORM_FLOAT);
 }
 
 Renderer::~Renderer()
@@ -83,7 +107,10 @@ void Renderer::DrawObjects(std::vector<Object> objectsInViewport)
 				DrawRectangle(screenPos.x, screenPos.y, 10, 10, WHITE);
 				break;
 			case XP_ORB:
-				DrawTexture(*textureHandler->GetTexture(XP_ORB_TEXTURE), screenPos.x, screenPos.y, WHITE);
+				SetShaderValue(*textureHandler->GetShader(XP_ORB_SHADER), secondsLoc, &framesCounter, SHADER_UNIFORM_FLOAT);
+				BeginShaderMode(*textureHandler->GetShader(XP_ORB_SHADER));
+					DrawTexture(*textureHandler->GetTexture(XP_ORB_TEXTURE), screenPos.x, screenPos.y, WHITE);
+				EndShaderMode();
 				break;
 			case CHEST:
 				DrawTexture(*textureHandler->GetTexture(CHEST_TEXTURE), screenPos.x, screenPos.y, WHITE);

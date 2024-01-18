@@ -41,5 +41,13 @@ private:
 	int playerFramesSpeed;
 	Rectangle playerFrameRec;
 	int currentPlayerFrame;
+
+	int secondsLoc;
+	int freqXLoc;
+	int freqYLoc;
+	int ampXLoc;
+	int ampYLoc;
+	int speedXLoc;
+	int speedYLoc;
 };
 
