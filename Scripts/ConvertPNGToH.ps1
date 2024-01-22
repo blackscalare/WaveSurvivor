@@ -1,0 +1,1 @@
+Get-Content -Encoding Byte -Raw BoltTexture.png | Out-File -Encoding ASCII -FilePath output.h

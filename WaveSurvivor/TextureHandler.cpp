@@ -1,7 +1,16 @@
 #include "TextureHandler.h"
+#ifndef _DEBUG
+#include "textures/output.h"
+#endif
+// TODO: make pngs into header files and use those in release.
+// Debug will use the png files
+// Get-Content -Encoding Byte -Raw BoltTexture.png | Out-File -Encoding ASCII -FilePath output.h
+// this PS script creates the desired data
+extern unsigned char boltTextureData[];
 
 TextureHandler::TextureHandler()
 {
+
 	background						= LoadTexture("textures/mapTexture_huge.png");
 	playerTexture					= LoadTexture("textures/playerAnimTexture.png");
 	playerMoveTexture				= LoadTexture("textures/playerMoveAnimation.png");
@@ -17,14 +26,21 @@ TextureHandler::TextureHandler()
 	pickupUpgradeTexture			= LoadTexture("textures/pickupUpgradeTexture.png");
 
 	thornAuraTexture				= LoadTexture("textures/thornAuraTexture.png");
+// Move this to encase all textures
+#ifdef _DEBUG
 	boltTexture						= LoadTexture("textures/boltTexture.png");
-
-
+#else
+	// Do release loading from memory
+	Image image = LoadImageFromMemory(".png", boltTextureData, sizeof(boltTextureData));
+	boltTexture = LoadTextureFromImage(image);
+	UnloadImage(image);
+#endif
 	buttonTexture					= LoadTexture("textures/buttonTexture.png");
 	mainMenuBackgroundTexture		= LoadTexture("textures/mainMenuBackgroundTexture.png");
 	altMenuBackgroundTexture		= LoadTexture("textures/altMenuBackground.png");
 	characterSelectBorderTexture	= LoadTexture("textures/characterSelectBorder.png");
-	
+
+
 	textures.insert(std::make_pair(BACKGROUND_TEXTURE, &background));
 	textures.insert(std::make_pair(PLAYER_TEXTURE, &playerTexture));
 	textures.insert(std::make_pair(PLAYER_MOVE_ANIMATION, &playerMoveTexture));

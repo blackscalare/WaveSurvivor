@@ -88,7 +88,6 @@ void GUI::Debug::DrawDebugUI(GameHandler* gameHandler)
 	Vector2 anchor01 = { 920, 48 };            // ANCHOR ID:1
 	bool WindowBox000Active = true;            // WindowBox: WindowBox000
 	bool CheckBox_GodModeChecked = false;            // CheckBoxEx: CheckBox_GodMode
-	int Spinner_LevelValue = gameHandler->GetPlayerLevel();            // Spinner: Spinner_Level
 
 	// Define controls rectangles
 	Rectangle layoutRecs[6] = {
