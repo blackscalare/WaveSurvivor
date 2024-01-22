@@ -3,8 +3,7 @@
 #include "Player.h"
 #include "Zombie.h"
 #include "Tools.h"
-//#define RAYGUI_IMPLEMENTATION
-//#include "raygui.h"
+#include "GameHandler.h"
 
 namespace GUI
 {
@@ -23,7 +22,7 @@ namespace GUI
 
 	class Debug {
 	public:
-		static void DrawDebugUI();
+		static void DrawDebugUI(GameHandler* gameHandler);
 	};
 };
 

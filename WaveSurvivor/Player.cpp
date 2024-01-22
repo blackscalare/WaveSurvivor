@@ -124,6 +124,7 @@ bool Player::LevelUp()
 		level++;
 		xp = 0;
 		levelThreshold = (long long)level * DEFAULT_PLAYER_LEVEL_THRESHOLD;
+		// TODO: should only get upgrades to these values through level up cards
 		maxHealth += 20;
 		fireSpeed -= 50;
 		moveSpeed += 0.01f;

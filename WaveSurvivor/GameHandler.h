@@ -30,10 +30,7 @@ public:
 	bool GetDebugMode();
 	World* GetWorldPtr();
 	bool GetGameOver();
-	bool PlayerJustLeveledUp();
-	bool PlayerJustOpenedChest();
 	void SetPlayerJustLeveledUp(bool val);
-	void SetPlayerJustOpenedChest(bool val);
 	void HandleSelectedCard(Card* card);
 	bool PlayerIsMoving();
 	int GetZombiesKilled() const;
@@ -44,9 +41,23 @@ public:
 	long long GetElapsedTime() const;
 	void SetState(GameState state);
 	GameState GetState();
-	void BindGameOverCallback(std::function<void(void)> fn) {
+	void BindGameOverCallback(std::function<void(void)> fn)
+	{
 		gameOverCallback = fn;
 	}
+	void BindPlayerLevelUpCallback(std::function<void(void)> fn)
+	{
+		playerLevelUpCallback = fn;
+	}
+	void BindPlayerOpenedChestCallback(std::function<void(void)> fn)
+	{
+		playerOpenedChestCallback = fn;
+	}
+	void SpawnEnemy();
+	void SpawnChest();
+	std::function<void(void)> playerLevelUpCallback;
+	int GetPlayerLevel();
+	void DebugLevelUpPlayer();
 
 private:
 	void Initialize();
@@ -60,7 +71,6 @@ private:
 	void HandleGeneralInput();
 	bool ShouldEnemySpawn(long long currentMs);
 	bool ShouldPlayerFire(long long currentMs);
-	void SpawnEnemy();
 	void MoveEnemies();
 	void MoveProjectiles();
 	Position GetNearestEnemyPosition();
@@ -80,14 +90,13 @@ private:
 	TextureHandler* textureHandler;
 	Position playerFireDestination;
 	bool gameOver;
-	bool playerJustLeveledUp;
-	bool playerJustOpenedChest;
 	long long zombiesKilled = 0;
 	bool playerIsMoving;
 	long long startTime;
 	long long elapsedTime;
 	GameState currentState;
 	std::function<void(void)> gameOverCallback;
+	std::function<void(void)> playerOpenedChestCallback;
 	//static quadtree::Box<float> GetBox(Node* node)
 	//{
 	//	return node->box;

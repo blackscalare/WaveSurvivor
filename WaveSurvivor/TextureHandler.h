@@ -13,6 +13,8 @@ private:
 	std::map<TextureName, Texture2D*> textures;
 	Texture2D background;
 	Texture2D playerTexture;
+	Texture2D playerMoveTexture;
+	Texture2D playerIdleTexture;
 	Texture2D zombieTexture;
 	Texture2D xpOrbTexture;
 	Texture2D chestTexture;

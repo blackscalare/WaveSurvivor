@@ -24,7 +24,6 @@ void GameHandler::Update()
 			HandleTime();
 			break;
 		case PAUSED:
-			// Modify start time so it seems like no time passes
 			break;
 		case PLAYER_DEAD:
 			// Handle player dead state
@@ -34,7 +33,6 @@ void GameHandler::Update()
 			// Handle win state
 			break;
 	}
-	
 }
 
 Position GameHandler::GetPlayerPosition()
@@ -168,7 +166,7 @@ void GameHandler::HandlePickup()
 			}
 			   break;
 			case CHEST:
-				playerJustOpenedChest = true;
+				playerOpenedChestCallback();
 				break;
 			default:
 				Logger::Log(Logger::ERROR, "Object not implemented!");
@@ -358,6 +356,23 @@ void GameHandler::SpawnEnemy()
 	//quadTree.add(zombieNode);
 }
 
+void GameHandler::SpawnChest()
+{
+	world->SpawnChest();
+}
+
+int GameHandler::GetPlayerLevel()
+{
+	return world->GetPlayerPtr()->GetLevel();
+}
+
+void GameHandler::DebugLevelUpPlayer()
+{
+	long long diff = world->GetPlayerPtr()->GetLevelThreshold() - world->GetPlayerPtr()->GetXp();
+	
+	world->GetPlayerPtr()->GainXp(diff);
+}
+
 // TODO: move similar to how projectiles are moved
 void GameHandler::MoveEnemies()
 {
@@ -448,7 +463,7 @@ Position GameHandler::GetNearestEnemyPosition()
 void GameHandler::UpdateZombiesKilled()
 {
 	if (++zombiesKilled % DEFAULT_CHEST_SPAWNRATE == 0) {
-		world->SpawnChest();
+		SpawnChest();
 	}
 
 }
@@ -563,27 +578,11 @@ bool GameHandler::GetGameOver()
 	return gameOver;
 }
 
-bool GameHandler::PlayerJustLeveledUp()
-{
-	return playerJustLeveledUp;
-}
-
-bool GameHandler::PlayerJustOpenedChest()
-{
-	return playerJustOpenedChest;
-}
-
 void GameHandler::SetPlayerJustLeveledUp(bool val)
 {
-	playerJustLeveledUp = val;
 	if (val) {
-		currentState = PAUSED;
+		playerLevelUpCallback();
 	}
-}
-
-void GameHandler::SetPlayerJustOpenedChest(bool val)
-{
-	playerJustOpenedChest = val;
 }
 
 void GameHandler::HandleSelectedCard(Card* card)

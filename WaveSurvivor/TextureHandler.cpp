@@ -4,6 +4,8 @@ TextureHandler::TextureHandler()
 {
 	background						= LoadTexture("textures/mapTexture_huge.png");
 	playerTexture					= LoadTexture("textures/playerAnimTexture.png");
+	playerMoveTexture				= LoadTexture("textures/playerMoveAnimation.png");
+	playerIdleTexture				= LoadTexture("textures/playerIdleAnimation.png");
 	zombieTexture					= LoadTexture("textures/zombieTexture.png");
 	xpOrbTexture					= LoadTexture("textures/xpOrbTexture.png");
 	chestTexture					= LoadTexture("textures/chestTexture.png");
@@ -25,6 +27,8 @@ TextureHandler::TextureHandler()
 	
 	textures.insert(std::make_pair(BACKGROUND_TEXTURE, &background));
 	textures.insert(std::make_pair(PLAYER_TEXTURE, &playerTexture));
+	textures.insert(std::make_pair(PLAYER_MOVE_ANIMATION, &playerMoveTexture));
+	textures.insert(std::make_pair(PLAYER_IDLE_ANIMATION, &playerIdleTexture));
 	textures.insert(std::make_pair(ZOMBIE_TEXTURE, &zombieTexture));
 	textures.insert(std::make_pair(XP_ORB_TEXTURE, &xpOrbTexture));
 	textures.insert(std::make_pair(CHEST_TEXTURE, &chestTexture));

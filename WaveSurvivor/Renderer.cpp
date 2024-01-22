@@ -16,9 +16,8 @@ Renderer::Renderer(TextureHandler* textureHandler, GameHandler* gameHandler, Lev
 
 	// TODO: move player animations somewhere else, animation handler?
 	framesCounter = 0;
-	playerFramesSpeed = 7;
+	playerFramesSpeed = 60;
 	currentPlayerFrame = 0;
-	playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->height };
 
 	// TODO: move shader logic somewhere else
 	secondsLoc = GetShaderLocation(*textureHandler->GetShader(XP_ORB_SHADER), "seconds");
@@ -46,19 +45,6 @@ void Renderer::Render()
 {
 	while (!WindowShouldClose()) {
 		ClearBackground(BLACK);
-
-		if (gameHandler->PlayerJustLeveledUp()) {
-			currentState = LEVEL_UP;
-			gameHandler->PauseGame();
-			gameHandler->SetPlayerJustLeveledUp(false);
-		}
-
-		if (gameHandler->PlayerJustOpenedChest()) {
-			// TODO this should be very similar to the level up screen but have other things?
-			currentState = LEVEL_UP;
-			gameHandler->PauseGame();
-			gameHandler->SetPlayerJustOpenedChest(false);
-		}
 
 		BeginDrawing();
 
@@ -166,27 +152,37 @@ void Renderer::DrawDebug()
 		DrawLine(playerCenter.x, playerCenter.y, screenPos.x, screenPos.y, GREEN);
 	}
 
-	GUI::Debug::DrawDebugUI();
+	// Not the best way of doing things but since this is debug, it is fine
+	GUI::Debug::DrawDebugUI(gameHandler);
 }
 
 void Renderer::DrawPlayer()
 {
 	if (gameHandler->PlayerIsMoving()) {
+		playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_MOVE_ANIMATION)->width / 2, (float)textureHandler->GetTexture(PLAYER_MOVE_ANIMATION)->height };
 		framesCounter++;
 		if (framesCounter >= (60 / playerFramesSpeed)) {
 			framesCounter = 0;
 			currentPlayerFrame++;
-			if (currentPlayerFrame > 3) currentPlayerFrame = 0;
-			playerFrameRec.x = (float)currentPlayerFrame * (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3;
+			if (currentPlayerFrame > 2) currentPlayerFrame = 0;
+			playerFrameRec.x = (float)currentPlayerFrame * (float)textureHandler->GetTexture(PLAYER_MOVE_ANIMATION)->width / 2;
 		}
+
+		DrawTextureRec(*textureHandler->GetTexture(PLAYER_MOVE_ANIMATION), playerFrameRec, { (float)centerX, (float)centerY }, WHITE);
 	}
 	else {
-		framesCounter = 0;
-		currentPlayerFrame = 0;
-		playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->width / 3, (float)textureHandler->GetTexture(PLAYER_TEXTURE)->height };
+		playerFrameRec = { 0.f, 0.f, (float)textureHandler->GetTexture(PLAYER_IDLE_ANIMATION)->width / 5, (float)textureHandler->GetTexture(PLAYER_IDLE_ANIMATION)->height };
+		framesCounter++;
+		if (framesCounter >= (60 / playerFramesSpeed)) {
+			framesCounter = 0;
+			currentPlayerFrame++;
+			if (currentPlayerFrame > 5) currentPlayerFrame = 0;
+			playerFrameRec.x = (float)currentPlayerFrame * (float)textureHandler->GetTexture(PLAYER_IDLE_ANIMATION)->width / 5;
+		}
+	
+		DrawTextureRec(*textureHandler->GetTexture(PLAYER_IDLE_ANIMATION), playerFrameRec, { (float)centerX, (float)centerY }, WHITE);
 	}
 	
-	DrawTextureRec(*textureHandler->GetTexture(PLAYER_TEXTURE), playerFrameRec, { (float)centerX, (float)centerY }, WHITE);
 	GUI::HealthBar::DrawPlayerHealthBar(gameHandler->GetWorldPtr()->GetPlayerPtr());
 
 	// Draw hitbox
@@ -263,5 +259,12 @@ void Renderer::RenderMainMenu()
 
 void Renderer::RenderOptions()
 {
+	float scaleX = static_cast<float>(GetScreenWidth()) / static_cast<float>(textureHandler->GetTexture(ALT_MENU_BACKGROUND_TEXTURE)->width);
+	float scaleY = static_cast<float>(GetScreenHeight()) / static_cast<float>(textureHandler->GetTexture(ALT_MENU_BACKGROUND_TEXTURE)->height);
+
+	// Calculate the average scale to fit the texture into the window
+	float scale = (scaleX + scaleY) / 2.0f;
+	DrawTextureEx(*textureHandler->GetTexture(ALT_MENU_BACKGROUND_TEXTURE), { 0,0 }, 0, scale, WHITE);
+
 	optionsMenu->Update();
 }

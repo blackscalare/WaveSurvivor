@@ -47,12 +47,19 @@ void WaveSurvivor::Init()
 	
 	eventHandler = new EventHandler();
 	eventHandler->LoadEvents();
+
 	textureHandler = new TextureHandler();
+	
 	gameHandler = new GameHandler(textureHandler, eventHandler);
 	gameHandler->BindGameOverCallback(std::bind(&WaveSurvivor::GameOverCallback, this));
+	gameHandler->BindPlayerLevelUpCallback(std::bind(&WaveSurvivor::PlayerLevelUpCallback, this));
+	gameHandler->BindPlayerOpenedChestCallback(std::bind(&WaveSurvivor::PlayerOpenedChestCallback, this));
+
 	levelUpScreenHandler = new LevelUpScreenHandler(gameHandler, textureHandler);
 	levelUpScreenHandler->BindCallback(std::bind(&WaveSurvivor::LevelUpScreenCardCallback, this));
+
 	optionsMenu = new OptionsMenu();
+	
 	mainMenu = new MainMenu(textureHandler);
 	mainMenu->BindCallback(std::bind(&WaveSurvivor::MainMenuButtonCallback, this, std::placeholders::_1));
 
@@ -95,4 +102,18 @@ void WaveSurvivor::LevelUpScreenCardCallback()
 void WaveSurvivor::GameOverCallback()
 {
 	renderer->SetState(MAIN_MENU);
+}
+
+void WaveSurvivor::PlayerLevelUpCallback()
+{
+	renderer->SetState(LEVEL_UP);
+	gameHandler->PauseGame();
+}
+
+void WaveSurvivor::PlayerOpenedChestCallback()
+{
+	// TODO this should be very similar to the level up screen but have other things?
+	// maybe new state or set some flag
+	renderer->SetState(LEVEL_UP);
+	gameHandler->PauseGame();
 }

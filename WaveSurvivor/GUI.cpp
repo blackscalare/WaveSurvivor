@@ -1,5 +1,6 @@
 #include "GUI.h"
 #include "Logger.h"
+#include "raygui.h"
 
 void GUI::HUD::DrawXPBar(Player* player)
 {
@@ -75,50 +76,50 @@ void GUI::HealthBar::DrawEnemyHealthBar(Zombie* zombie, Position playerPos)
 	DrawRectangleLines(healthBarPos.x, healthBarPos.y, barWidth, 5, WHITE);
 }
 
-void GUI::Debug::DrawDebugUI()
+void GUI::Debug::DrawDebugUI(GameHandler* gameHandler)
 {
-	//const char* WindowBox000Text = "Debug";    // WINDOWBOX: WindowBox000
-	//const char* CheckBox_GodModeText = "Godmode";    // CHECKBOXEX: CheckBox_GodMode
-	//const char* Button_SpawnEnemyText = "Spawn enemy";    // BUTTON: Button_SpawnEnemy
-	//const char* Button_SpawnChestText = "Spawn chest";    // BUTTON: Button_SpawnChest
-	//const char* Button_TriggerCardsText = "Trigger cards";    // BUTTON: Button_TriggerCards
-	//const char* Spinner_LevelText = "Level";
+	const char* WindowBox000Text = "Debug";    // WINDOWBOX: WindowBox000
+	const char* CheckBox_GodModeText = "Godmode";    // CHECKBOXEX: CheckBox_GodMode
+	const char* Button_SpawnEnemyText = "Spawn enemy";    // BUTTON: Button_SpawnEnemy
+	const char* Button_SpawnChestText = "Spawn chest";    // BUTTON: Button_SpawnChest
+	const char* Button_TriggerCardsText = "Trigger cards";    // BUTTON: Button_TriggerCards
+	const char* Button_LevelText = "Level up";
 
-	//Vector2 anchor01 = { 920, 48 };            // ANCHOR ID:1
-	//bool WindowBox000Active = true;            // WindowBox: WindowBox000
-	//bool CheckBox_GodModeChecked = false;            // CheckBoxEx: CheckBox_GodMode
-	//bool Spinner_LevelEditMode = false;
-	//int Spinner_LevelValue = 0;            // Spinner: Spinner_Level
+	Vector2 anchor01 = { 920, 48 };            // ANCHOR ID:1
+	bool WindowBox000Active = true;            // WindowBox: WindowBox000
+	bool CheckBox_GodModeChecked = false;            // CheckBoxEx: CheckBox_GodMode
+	int Spinner_LevelValue = gameHandler->GetPlayerLevel();            // Spinner: Spinner_Level
 
-	//// Define controls rectangles
-	//Rectangle layoutRecs[6] = {
-	//	{
-	//	 anchor01.x + -56, anchor01.y + 0, 216, 192
-	//	},    // WindowBox: WindowBox000
-	//	{
-	//	anchor01.x + -8, anchor01.y + 40, 16, 16
-	//	},    // CheckBoxEx: CheckBox_GodMode
-	//	{
-	//	anchor01.x + -8, anchor01.y + 72, 112, 16
-	//	},    // Spinner: Spinner_Level
-	//	{
-	//	anchor01.x + -8, anchor01.y + 104, 112, 16
-	//	},    // Button: Button_SpawnEnemy
-	//	{
-	//	anchor01.x + -8, anchor01.y + 128, 112, 16
-	//	},    // Button: Button_SpawnChest
-	//	{
-	//	anchor01.x + -8, anchor01.y + 152, 112, 16
-	//	},    // Button: Button_TriggerCards
-	//};
+	// Define controls rectangles
+	Rectangle layoutRecs[6] = {
+		{
+		 anchor01.x + -56, anchor01.y + 0, 216, 192
+		},    // WindowBox: WindowBox000
+		{
+		anchor01.x + -8, anchor01.y + 40, 16, 16
+		},    // CheckBoxEx: CheckBox_GodMode
+		{
+		anchor01.x + -8, anchor01.y + 80, 112, 16
+		},    // Button: Button_LevelUp
+		{
+		anchor01.x + -8, anchor01.y + 104, 112, 16
+		},    // Button: Button_SpawnEnemy
+		{
+		anchor01.x + -8, anchor01.y + 128, 112, 16
+		},    // Button: Button_SpawnChest
+		{
+		anchor01.x + -8, anchor01.y + 152, 112, 16
+		},    // Button: Button_TriggerCards
+	};
 
-	//if (WindowBox000Active)
-	//{
-	//	WindowBox000Active = !GuiWindowBox(layoutRecs[0], WindowBox000Text);
-	//	GuiCheckBox(layoutRecs[1], CheckBox_GodModeText, &CheckBox_GodModeChecked);
-	//	if (GuiSpinner(layoutRecs[2], Spinner_LevelText, &Spinner_LevelValue, 0, 100, Spinner_LevelEditMode)) Spinner_LevelEditMode = !Spinner_LevelEditMode;
-	//	if (GuiButton(layoutRecs[3], Button_SpawnEnemyText)) /*Button()*/void;
-	//	if (GuiButton(layoutRecs[4], Button_SpawnChestText)) /*Button()*/void;
-	//	if (GuiButton(layoutRecs[5], Button_TriggerCardsText)) /*Button()*/void;
-	//}
+	if (WindowBox000Active)
+	{
+		WindowBox000Active = !GuiWindowBox(layoutRecs[0], WindowBox000Text);
+		GuiCheckBox(layoutRecs[1], CheckBox_GodModeText, &CheckBox_GodModeChecked);
+
+		if (GuiButton(layoutRecs[2], Button_LevelText)) gameHandler->DebugLevelUpPlayer();
+		if (GuiButton(layoutRecs[3], Button_SpawnEnemyText)) gameHandler->SpawnEnemy();
+		if (GuiButton(layoutRecs[4], Button_SpawnChestText)) gameHandler->SpawnChest();
+		if (GuiButton(layoutRecs[5], Button_TriggerCardsText)) gameHandler->playerLevelUpCallback();
+	}
 }
