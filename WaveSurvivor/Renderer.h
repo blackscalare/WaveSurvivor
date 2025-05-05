@@ -21,6 +21,7 @@ private:
 	void DrawObjects(std::vector<Object> objectsInViewport);
 	void DrawEnemies(std::vector<Zombie*> enemiesInViewport);
 	void DrawProjectiles(std::vector<Projectile*> projectilesInViewport);
+	void DrawOtherPlayers(std::vector<NetPlayer> otherPlayersInViewport);
 	void DrawDebug();
 	void DrawPlayer();
 	void DrawGUI();

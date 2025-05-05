@@ -345,3 +345,28 @@ enum GameState
 	PLAYER_DEAD,
 	WIN
 };
+
+struct Node
+{
+	Rectangle rect;
+	std::vector<Hitbox*> objects;
+	std::vector<Node*> children;
+};
+
+struct NetPlayer {
+	int id;
+	int x;
+	int y;
+
+	NetPlayer() {
+		id = -1;
+		x = 0;
+		y = 0;
+	}
+
+	NetPlayer(int id, int x, int y) {
+		this->id = id;
+		this->x = x;
+		this->y = y;
+	}
+};

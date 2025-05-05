@@ -138,6 +138,27 @@ void Renderer::DrawProjectiles(std::vector<Projectile*> projectilesInViewport)
 	}
 }
 
+void Renderer::DrawOtherPlayers(std::vector<NetPlayer> otherPlayersInViewport)
+{
+	//Position screenPos = Tools::ScreenSpace::GetWorldToScreen(pos, gameHandler->GetPlayerPosition());
+	if (otherPlayersInViewport.size() > 0) {
+		for (NetPlayer p : otherPlayersInViewport) {
+			Position pos = Position(p.x, p.y);
+			// Convert position from world to screen
+			Position screenPos = Tools::ScreenSpace::GetWorldToScreen(pos, gameHandler->GetPlayerPosition());
+
+			DrawTexture(*textureHandler->GetTexture(PLAYER_MOVE_ANIMATION), screenPos.x, screenPos.y, WHITE);
+			//GUI::HealthBar::DrawPlayerHealthBar(p);
+
+			if (gameHandler->GetDebugMode()) {
+				Position pos = Position(p.x, p.y);
+				Position screenPos = Tools::ScreenSpace::GetWorldToScreen(pos, gameHandler->GetPlayerPosition());
+				//DrawRectangleLines(screenPos.x, screenPos.y, p->GetHitbox().area.width, p->GetHitbox().area.width, GREEN);
+			}
+		}
+	}
+}
+
 void Renderer::DrawDebug()
 {
 	int centerX = GetScreenWidth() / 2;
@@ -231,10 +252,12 @@ void Renderer::RenderGame()
 	std::vector<Object> objectsInViewport = gameHandler->GetObjectsInViewport();
 	std::vector<Zombie*> enemiesInViewport = gameHandler->GetEnemiesInViewport();
 	std::vector<Projectile*> projectilesInViewport = gameHandler->GetProjectilesInViewport();
+	std::vector<NetPlayer> otherPlayersInViewport = gameHandler->GetOtherPlayersInViewport();
 	
 	DrawBackground();
 	DrawGUI();
 	DrawPlayer();
+	DrawOtherPlayers(otherPlayersInViewport);
 	DrawObjects(objectsInViewport);
 	DrawEnemies(enemiesInViewport);
 	DrawProjectiles(projectilesInViewport);

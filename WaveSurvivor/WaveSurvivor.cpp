@@ -65,7 +65,6 @@ void WaveSurvivor::Init()
 
 	// Initialize everything else before the renderer
 	renderer = new Renderer(textureHandler, gameHandler, levelUpScreenHandler, mainMenu, optionsMenu);
-
 }
 
 void WaveSurvivor::MainMenuButtonCallback(int buttonId)

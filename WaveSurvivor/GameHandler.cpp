@@ -6,6 +6,10 @@ GameHandler::GameHandler(TextureHandler* textureHandler, EventHandler* eventHand
 	Initialize();
 	this->textureHandler = textureHandler;
 	this->eventHandler = eventHandler;
+	connectionManager = new ConnectionManager();
+	connectionManager->StartReceivingMessages();
+	connectionManager->SendMessage("Hello server!");
+
 }
 
 GameHandler::~GameHandler()
@@ -17,6 +21,7 @@ void GameHandler::Update()
 	switch (currentState) {
 		case RUNNING:
 			HandlePlayer();
+			HandleOtherPlayers();
 			HandleEnemies();
 			HandleProjectiles();
 			HandleGeneralInput();
@@ -115,6 +120,35 @@ std::vector<Projectile*> GameHandler::GetProjectilesInViewport()
 	}
 
 	return projectilesInViewport;
+}
+
+std::vector<NetPlayer> GameHandler::GetOtherPlayersInViewport()
+{
+	std::map<int, NetPlayer>* otherPlayersPtr = world->GetOtherPlayerPtrs();
+	std::vector<NetPlayer> otherPlayersInViewport = {};
+
+	if (otherPlayersPtr == NULL) {
+		return otherPlayersInViewport;
+	}
+	Position playerPos = world->GetPlayerPtr()->GetPosition();
+	int xStart = playerPos.x - GetScreenWidth() / 2 > 0 ? playerPos.x - GetScreenWidth() / 2 : 0;
+	int xEnd = playerPos.x + GetScreenWidth() / 2 < world->GetWorldSize().x ? playerPos.x + GetScreenWidth() / 2 : world->GetWorldSize().x;
+	int yStart = playerPos.y - GetScreenHeight() / 2 > 0 ? playerPos.y - GetScreenHeight() / 2 : 0;
+	int yEnd = playerPos.y + GetScreenHeight() / 2 < world->GetWorldSize().y ? playerPos.y + GetScreenHeight() / 2 : world->GetWorldSize().y;
+
+	Position playerPosXRange = { xStart, xEnd };
+	Position playerPosYRange = { yStart, yEnd };
+
+	for (const auto& pair : *otherPlayersPtr) {
+		NetPlayer op = pair.second;
+		Position pos = Position(op.x, op.y);
+		if ((pos.x >= playerPosXRange.x && pos.x <= playerPosXRange.y) &&
+			(pos.y >= playerPosYRange.x && pos.y <= playerPosYRange.y)) {
+			otherPlayersInViewport.push_back(op);
+		}
+	}
+
+	return otherPlayersInViewport;
 }
 
 void GameHandler::Initialize()
@@ -227,10 +261,6 @@ bool GameHandler::CheckForCollision(Projectile* p)
 		}
 		
 		Hitbox zHitbox = pair.second->GetHitbox();
-		int hitboxStartX = (int)zHitbox.area.x;
-		int hitboxEndX = (int)zHitbox.area.x + (int)zHitbox.area.width;
-		int hitboxStartY = (int)zHitbox.area.y;
-		int hitboxEndY = (int)zHitbox.area.y + (int)zHitbox.area.width;
 
 		if (CheckCollisionRecs(zHitbox.area, { p->GetPosition().x, p->GetPosition().y, DEFAULT_PROJECTILE_WIDTH, DEFAULT_PROJECTILE_HEIGHT })) {
 			hitSomething = true;
@@ -281,6 +311,14 @@ void GameHandler::HandlePlayer()
 
 	HandlePickup();
 	HandlePlayerMovement();
+	std::ostringstream oss;
+	oss << GetPlayerPosition().x << "," << GetPlayerPosition().y;
+	connectionManager->SendMessage(oss.str().c_str());
+}
+
+void GameHandler::HandleOtherPlayers()
+{
+	world->SetOtherPlayerPtrs(connectionManager->GetPlayersPtr());
 }
 
 void GameHandler::HandleEnemies()

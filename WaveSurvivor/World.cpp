@@ -48,6 +48,16 @@ Player* World::GetPlayerPtr()
 	return player;
 }
 
+std::map<int, NetPlayer>* World::GetOtherPlayerPtrs()
+{
+	return otherPlayers;
+}
+
+void World::SetOtherPlayerPtrs(std::map<int, NetPlayer>* otherPlayers)
+{
+	this->otherPlayers = otherPlayers;
+}
+
 std::map<int, Zombie*>* World::GetZombiesMapPtr()
 {
 	return zombies;

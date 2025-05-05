@@ -7,6 +7,7 @@
 #include "XPOrb.h"
 #include "TextureHandler.h"
 #include "EventHandler.h"
+#include "ConnectionManager.h"
 
 class GameHandler
 {
@@ -26,6 +27,7 @@ public:
 	std::vector<Object> GetObjectsInViewport();
 	std::vector<Zombie*> GetEnemiesInViewport();
 	std::vector<Projectile*> GetProjectilesInViewport();
+	std::vector<NetPlayer> GetOtherPlayersInViewport();
 	Position GetPlayerFireDestination();
 	bool GetDebugMode();
 	World* GetWorldPtr();
@@ -66,6 +68,7 @@ private:
 	bool CheckForCollision();
 	bool CheckForCollision(Projectile* p);
 	void HandlePlayer();
+	void HandleOtherPlayers();
 	void HandleEnemies();
 	void HandleProjectiles();
 	void HandleGeneralInput();
@@ -97,6 +100,7 @@ private:
 	GameState currentState;
 	std::function<void(void)> gameOverCallback;
 	std::function<void(void)> playerOpenedChestCallback;
+	ConnectionManager* connectionManager;
 	//static quadtree::Box<float> GetBox(Node* node)
 	//{
 	//	return node->box;

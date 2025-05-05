@@ -15,6 +15,8 @@ public:
 
 	Position GetWorldSize();
 	Player* GetPlayerPtr();
+	std::map<int, NetPlayer>* GetOtherPlayerPtrs();
+	void SetOtherPlayerPtrs(std::map<int, NetPlayer>* otherPlayers);
 	std::map<int, Zombie*>* GetZombiesMapPtr();
 	std::map<int, Projectile*>* GetProjectilesPtr();
 	std::set<Object*>* GetObjectsPtr();
@@ -24,6 +26,7 @@ public:
 private:
 	Position size;
 	Player* player;
+	std::map<int, NetPlayer>* otherPlayers;
 	std::map<int, Zombie*>* zombies;
 	std::set<Object*> objects;
 	std::map<int, Projectile*>* projectiles;
